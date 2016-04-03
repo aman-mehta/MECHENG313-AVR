@@ -1,0 +1,2171 @@
+
+AVRASM ver. 2.1.57  E:\Project1FinalCommented\Project1\Project1\Project1.asm Fri Sep 18 15:39:33 2015
+
+[builtin](2): Including file 'E:\Project1FinalCommented\Project1\Project1\m8def.inc'
+E:\Project1FinalCommented\Project1\Project1\Project1.asm(9): Including file 'E:\Project1FinalCommented\Project1\Project1\m8def.inc'
+E:\Project1FinalCommented\Project1\Project1\Project1.asm(73): Including file 'E:\Project1FinalCommented\Project1\Project1\MECHENG313A.inc'
+                 
+                 /*
+                 
+                 ;***** Created: 2011-02-09 12:03 ******* Source: ATmega8.xml *************
+                 ;*************************************************************************
+                 ;* A P P L I C A T I O N   N O T E   F O R   T H E   A V R   F A M I L Y
+                 ;* 
+                 ;* Number            : AVR000
+                 ;* File Name         : "m8def.inc"
+                 ;* Title             : Register/Bit Definitions for the ATmega8
+                 ;* Date              : 2011-02-09
+                 ;* Version           : 2.35
+                 ;* Support E-mail    : avr@atmel.com
+                 ;* Target MCU        : ATmega8
+                 ;* 
+                 ;* DESCRIPTION
+                 ;* When including this file in the assembly program file, all I/O register 
+                 ;* names and I/O register bit names appearing in the data book can be used.
+                 ;* In addition, the six registers forming the three data pointers X, Y and 
+                 ;* Z have been assigned names XL - ZH. Highest RAM address for Internal 
+                 ;* SRAM is also defined 
+                 ;* 
+                 ;* The Register names are represented by their hexadecimal address.
+                 ;* 
+                 ;* The Register Bit names are represented by their bit number (0-7).
+                 ;* 
+                 ;* Please observe the difference in using the bit names with instructions
+                 ;* such as "sbr"/"cbr" (set/clear bit in register) and "sbrs"/"sbrc"
+                 ;* (skip if bit in register set/cleared). The following example illustrates
+                 ;* this:
+                 ;* 
+                 ;* in    r16,PORTB             ;read PORTB latch
+                 ;* sbr   r16,(1<<PB6)+(1<<PB5) ;set PB6 and PB5 (use masks, not bit#)
+                 ;* out   PORTB,r16             ;output to PORTB
+                 ;* 
+                 ;* in    r16,TIFR              ;read the Timer Interrupt Flag Register
+                 ;* sbrc  r16,TOV0              ;test the overflow flag (use bit#)
+                 ;* rjmp  TOV0_is_set           ;jump if set
+                 ;* ...                         ;otherwise do something else
+                 ;*************************************************************************
+                 
+                 #ifndef _M8DEF_INC_
+                 #define _M8DEF_INC_
+                 
+                 
+                 #pragma partinc 0
+                 
+                 ; ***** SPECIFY DEVICE ***************************************************
+                 .device ATmega8
+                 #pragma AVRPART ADMIN PART_NAME ATmega8
+                 .equ	SIGNATURE_000	= 0x1e
+                 .equ	SIGNATURE_001	= 0x93
+                 .equ	SIGNATURE_002	= 0x07
+                 
+                 #pragma AVRPART CORE CORE_VERSION V2E
+                 
+                 
+                 ; ***** I/O REGISTER DEFINITIONS *****************************************
+                 ; NOTE:
+                 ; Definitions marked "MEMORY MAPPED"are extended I/O ports
+                 ; and cannot be used with IN/OUT instructions
+                 .equ	SREG	= 0x3f
+                 .equ	SPL	= 0x3d
+                 .equ	SPH	= 0x3e
+                 .equ	GICR	= 0x3b
+                 .equ	GIFR	= 0x3a
+                 .equ	TIMSK	= 0x39
+                 .equ	TIFR	= 0x38
+                 .equ	SPMCR	= 0x37
+                 .equ	TWCR	= 0x36
+                 .equ	MCUCR	= 0x35
+                 .equ	MCUCSR	= 0x34
+                 .equ	TCCR0	= 0x33
+                 .equ	TCNT0	= 0x32
+                 .equ	OSCCAL	= 0x31
+                 .equ	SFIOR	= 0x30
+                 .equ	TCCR1A	= 0x2f
+                 .equ	TCCR1B	= 0x2e
+                 .equ	TCNT1L	= 0x2c
+                 .equ	TCNT1H	= 0x2d
+                 .equ	OCR1AL	= 0x2a
+                 .equ	OCR1AH	= 0x2b
+                 .equ	OCR1BL	= 0x28
+                 .equ	OCR1BH	= 0x29
+                 .equ	ICR1L	= 0x26
+                 .equ	ICR1H	= 0x27
+                 .equ	TCCR2	= 0x25
+                 .equ	TCNT2	= 0x24
+                 .equ	OCR2	= 0x23
+                 .equ	ASSR	= 0x22
+                 .equ	WDTCR	= 0x21
+                 .equ	UBRRH	= 0x20
+                 .equ	UCSRC	= 0x20
+                 .equ	EEARL	= 0x1e
+                 .equ	EEARH	= 0x1f
+                 .equ	EEDR	= 0x1d
+                 .equ	EECR	= 0x1c
+                 .equ	PORTB	= 0x18
+                 .equ	DDRB	= 0x17
+                 .equ	PINB	= 0x16
+                 .equ	PORTC	= 0x15
+                 .equ	DDRC	= 0x14
+                 .equ	PINC	= 0x13
+                 .equ	PORTD	= 0x12
+                 .equ	DDRD	= 0x11
+                 .equ	PIND	= 0x10
+                 .equ	SPDR	= 0x0f
+                 .equ	SPSR	= 0x0e
+                 .equ	SPCR	= 0x0d
+                 .equ	UDR	= 0x0c
+                 .equ	UCSRA	= 0x0b
+                 .equ	UCSRB	= 0x0a
+                 .equ	UBRRL	= 0x09
+                 .equ	ACSR	= 0x08
+                 .equ	ADMUX	= 0x07
+                 .equ	ADCSRA	= 0x06
+                 .equ	ADCL	= 0x04
+                 .equ	ADCH	= 0x05
+                 .equ	TWDR	= 0x03
+                 .equ	TWAR	= 0x02
+                 .equ	TWSR	= 0x01
+                 .equ	TWBR	= 0x00
+                 
+                 
+                 ; ***** BIT DEFINITIONS **************************************************
+                 
+                 ; ***** ANALOG_COMPARATOR ************
+                 ; SFIOR - Special Function IO Register
+                 .equ	ACME	= 3	; Analog Comparator Multiplexer Enable
+                 
+                 ; ACSR - Analog Comparator Control And Status Register
+                 .equ	ACIS0	= 0	; Analog Comparator Interrupt Mode Select bit 0
+                 .equ	ACIS1	= 1	; Analog Comparator Interrupt Mode Select bit 1
+                 .equ	ACIC	= 2	; Analog Comparator Input Capture Enable
+                 .equ	ACIE	= 3	; Analog Comparator Interrupt Enable
+                 .equ	ACI	= 4	; Analog Comparator Interrupt Flag
+                 .equ	ACO	= 5	; Analog Compare Output
+                 .equ	ACBG	= 6	; Analog Comparator Bandgap Select
+                 .equ	ACD	= 7	; Analog Comparator Disable
+                 
+                 
+                 ; ***** SPI **************************
+                 ; SPDR - SPI Data Register
+                 .equ	SPDR0	= 0	; SPI Data Register bit 0
+                 .equ	SPDR1	= 1	; SPI Data Register bit 1
+                 .equ	SPDR2	= 2	; SPI Data Register bit 2
+                 .equ	SPDR3	= 3	; SPI Data Register bit 3
+                 .equ	SPDR4	= 4	; SPI Data Register bit 4
+                 .equ	SPDR5	= 5	; SPI Data Register bit 5
+                 .equ	SPDR6	= 6	; SPI Data Register bit 6
+                 .equ	SPDR7	= 7	; SPI Data Register bit 7
+                 
+                 ; SPSR - SPI Status Register
+                 .equ	SPI2X	= 0	; Double SPI Speed Bit
+                 .equ	WCOL	= 6	; Write Collision Flag
+                 .equ	SPIF	= 7	; SPI Interrupt Flag
+                 
+                 ; SPCR - SPI Control Register
+                 .equ	SPR0	= 0	; SPI Clock Rate Select 0
+                 .equ	SPR1	= 1	; SPI Clock Rate Select 1
+                 .equ	CPHA	= 2	; Clock Phase
+                 .equ	CPOL	= 3	; Clock polarity
+                 .equ	MSTR	= 4	; Master/Slave Select
+                 .equ	DORD	= 5	; Data Order
+                 .equ	SPE	= 6	; SPI Enable
+                 .equ	SPIE	= 7	; SPI Interrupt Enable
+                 
+                 
+                 ; ***** EXTERNAL_INTERRUPT ***********
+                 ; GICR - General Interrupt Control Register
+                 .equ	GIMSK	= GICR	; For compatibility
+                 .equ	IVCE	= 0	; Interrupt Vector Change Enable
+                 .equ	IVSEL	= 1	; Interrupt Vector Select
+                 .equ	INT0	= 6	; External Interrupt Request 0 Enable
+                 .equ	INT1	= 7	; External Interrupt Request 1 Enable
+                 
+                 ; GIFR - General Interrupt Flag Register
+                 .equ	INTF0	= 6	; External Interrupt Flag 0
+                 .equ	INTF1	= 7	; External Interrupt Flag 1
+                 
+                 ; MCUCR - MCU Control Register
+                 .equ	ISC00	= 0	; Interrupt Sense Control 0 Bit 0
+                 .equ	ISC01	= 1	; Interrupt Sense Control 0 Bit 1
+                 .equ	ISC10	= 2	; Interrupt Sense Control 1 Bit 0
+                 .equ	ISC11	= 3	; Interrupt Sense Control 1 Bit 1
+                 
+                 
+                 ; ***** TIMER_COUNTER_0 **************
+                 ; TIMSK - Timer/Counter Interrupt Mask Register
+                 .equ	TOIE0	= 0	; Timer/Counter0 Overflow Interrupt Enable
+                 
+                 ; TIFR - Timer/Counter Interrupt Flag register
+                 .equ	TOV0	= 0	; Timer/Counter0 Overflow Flag
+                 
+                 ; TCCR0 - Timer/Counter0 Control Register
+                 .equ	CS00	= 0	; Clock Select0 bit 0
+                 .equ	CS01	= 1	; Clock Select0 bit 1
+                 .equ	CS02	= 2	; Clock Select0 bit 2
+                 
+                 ; TCNT0 - Timer Counter 0
+                 .equ	TCNT00	= 0	; Timer Counter 0 bit 0
+                 .equ	TCNT01	= 1	; Timer Counter 0 bit 1
+                 .equ	TCNT02	= 2	; Timer Counter 0 bit 2
+                 .equ	TCNT03	= 3	; Timer Counter 0 bit 3
+                 .equ	TCNT04	= 4	; Timer Counter 0 bit 4
+                 .equ	TCNT05	= 5	; Timer Counter 0 bit 5
+                 .equ	TCNT06	= 6	; Timer Counter 0 bit 6
+                 .equ	TCNT07	= 7	; Timer Counter 0 bit 7
+                 
+                 
+                 ; ***** TIMER_COUNTER_1 **************
+                 ; TIMSK - Timer/Counter Interrupt Mask Register
+                 .equ	TOIE1	= 2	; Timer/Counter1 Overflow Interrupt Enable
+                 .equ	OCIE1B	= 3	; Timer/Counter1 Output CompareB Match Interrupt Enable
+                 .equ	OCIE1A	= 4	; Timer/Counter1 Output CompareA Match Interrupt Enable
+                 .equ	TICIE1	= 5	; Timer/Counter1 Input Capture Interrupt Enable
+                 
+                 ; TIFR - Timer/Counter Interrupt Flag register
+                 .equ	TOV1	= 2	; Timer/Counter1 Overflow Flag
+                 .equ	OCF1B	= 3	; Output Compare Flag 1B
+                 .equ	OCF1A	= 4	; Output Compare Flag 1A
+                 .equ	ICF1	= 5	; Input Capture Flag 1
+                 
+                 ; TCCR1A - Timer/Counter1 Control Register A
+                 .equ	WGM10	= 0	; Waveform Generation Mode
+                 .equ	PWM10	= WGM10	; For compatibility
+                 .equ	WGM11	= 1	; Waveform Generation Mode
+                 .equ	PWM11	= WGM11	; For compatibility
+                 .equ	FOC1B	= 2	; Force Output Compare 1B
+                 .equ	FOC1A	= 3	; Force Output Compare 1A
+                 .equ	COM1B0	= 4	; Compare Output Mode 1B, bit 0
+                 .equ	COM1B1	= 5	; Compare Output Mode 1B, bit 1
+                 .equ	COM1A0	= 6	; Compare Ouput Mode 1A, bit 0
+                 .equ	COM1A1	= 7	; Compare Output Mode 1A, bit 1
+                 
+                 ; TCCR1B - Timer/Counter1 Control Register B
+                 .equ	CS10	= 0	; Prescaler source of Timer/Counter 1
+                 .equ	CS11	= 1	; Prescaler source of Timer/Counter 1
+                 .equ	CS12	= 2	; Prescaler source of Timer/Counter 1
+                 .equ	WGM12	= 3	; Waveform Generation Mode
+                 .equ	CTC10	= WGM12	; For compatibility
+                 .equ	CTC1	= WGM12	; For compatibility
+                 .equ	WGM13	= 4	; Waveform Generation Mode
+                 .equ	CTC11	= WGM13	; For compatibility
+                 .equ	ICES1	= 6	; Input Capture 1 Edge Select
+                 .equ	ICNC1	= 7	; Input Capture 1 Noise Canceler
+                 
+                 
+                 ; ***** TIMER_COUNTER_2 **************
+                 ; TIMSK - Timer/Counter Interrupt Mask register
+                 .equ	TOIE2	= 6	; Timer/Counter2 Overflow Interrupt Enable
+                 .equ	OCIE2	= 7	; Timer/Counter2 Output Compare Match Interrupt Enable
+                 
+                 ; TIFR - Timer/Counter Interrupt Flag Register
+                 .equ	TOV2	= 6	; Timer/Counter2 Overflow Flag
+                 .equ	OCF2	= 7	; Output Compare Flag 2
+                 
+                 ; TCCR2 - Timer/Counter2 Control Register
+                 .equ	CS20	= 0	; Clock Select bit 0
+                 .equ	CS21	= 1	; Clock Select bit 1
+                 .equ	CS22	= 2	; Clock Select bit 2
+                 .equ	WGM21	= 3	; Waveform Generation Mode
+                 .equ	CTC2	= WGM21	; For compatibility
+                 .equ	COM20	= 4	; Compare Output Mode bit 0
+                 .equ	COM21	= 5	; Compare Output Mode bit 1
+                 .equ	WGM20	= 6	; Waveform Genration Mode
+                 .equ	PWM2	= WGM20	; For compatibility
+                 .equ	FOC2	= 7	; Force Output Compare
+                 
+                 ; TCNT2 - Timer/Counter2
+                 .equ	TCNT2_0	= 0	; Timer/Counter 2 bit 0
+                 .equ	TCNT2_1	= 1	; Timer/Counter 2 bit 1
+                 .equ	TCNT2_2	= 2	; Timer/Counter 2 bit 2
+                 .equ	TCNT2_3	= 3	; Timer/Counter 2 bit 3
+                 .equ	TCNT2_4	= 4	; Timer/Counter 2 bit 4
+                 .equ	TCNT2_5	= 5	; Timer/Counter 2 bit 5
+                 .equ	TCNT2_6	= 6	; Timer/Counter 2 bit 6
+                 .equ	TCNT2_7	= 7	; Timer/Counter 2 bit 7
+                 
+                 ; OCR2 - Timer/Counter2 Output Compare Register
+                 .equ	OCR2_0	= 0	; Timer/Counter2 Output Compare Register Bit 0
+                 .equ	OCR2_1	= 1	; Timer/Counter2 Output Compare Register Bit 1
+                 .equ	OCR2_2	= 2	; Timer/Counter2 Output Compare Register Bit 2
+                 .equ	OCR2_3	= 3	; Timer/Counter2 Output Compare Register Bit 3
+                 .equ	OCR2_4	= 4	; Timer/Counter2 Output Compare Register Bit 4
+                 .equ	OCR2_5	= 5	; Timer/Counter2 Output Compare Register Bit 5
+                 .equ	OCR2_6	= 6	; Timer/Counter2 Output Compare Register Bit 6
+                 .equ	OCR2_7	= 7	; Timer/Counter2 Output Compare Register Bit 7
+                 
+                 ; ASSR - Asynchronous Status Register
+                 .equ	TCR2UB	= 0	; Timer/counter Control Register2 Update Busy
+                 .equ	OCR2UB	= 1	; Output Compare Register2 Update Busy
+                 .equ	TCN2UB	= 2	; Timer/Counter2 Update Busy
+                 .equ	AS2	= 3	; Asynchronous Timer/counter2
+                 
+                 ; SFIOR - Special Function IO Register
+                 .equ	PSR2	= 1	; Prescaler Reset Timer/Counter2
+                 
+                 
+                 ; ***** USART ************************
+                 ; UDR - USART I/O Data Register
+                 .equ	UDR0	= 0	; USART I/O Data Register bit 0
+                 .equ	UDR1	= 1	; USART I/O Data Register bit 1
+                 .equ	UDR2	= 2	; USART I/O Data Register bit 2
+                 .equ	UDR3	= 3	; USART I/O Data Register bit 3
+                 .equ	UDR4	= 4	; USART I/O Data Register bit 4
+                 .equ	UDR5	= 5	; USART I/O Data Register bit 5
+                 .equ	UDR6	= 6	; USART I/O Data Register bit 6
+                 .equ	UDR7	= 7	; USART I/O Data Register bit 7
+                 
+                 ; UCSRA - USART Control and Status Register A
+                 .equ	USR	= UCSRA	; For compatibility
+                 .equ	MPCM	= 0	; Multi-processor Communication Mode
+                 .equ	U2X	= 1	; Double the USART transmission speed
+                 .equ	UPE	= 2	; Parity Error
+                 .equ	PE	= UPE	; For compatibility
+                 .equ	DOR	= 3	; Data overRun
+                 .equ	FE	= 4	; Framing Error
+                 .equ	UDRE	= 5	; USART Data Register Empty
+                 .equ	TXC	= 6	; USART Transmitt Complete
+                 .equ	RXC	= 7	; USART Receive Complete
+                 
+                 ; UCSRB - USART Control and Status Register B
+                 .equ	UCR	= UCSRB	; For compatibility
+                 .equ	TXB8	= 0	; Transmit Data Bit 8
+                 .equ	RXB8	= 1	; Receive Data Bit 8
+                 .equ	UCSZ2	= 2	; Character Size
+                 .equ	CHR9	= UCSZ2	; For compatibility
+                 .equ	TXEN	= 3	; Transmitter Enable
+                 .equ	RXEN	= 4	; Receiver Enable
+                 .equ	UDRIE	= 5	; USART Data register Empty Interrupt Enable
+                 .equ	TXCIE	= 6	; TX Complete Interrupt Enable
+                 .equ	RXCIE	= 7	; RX Complete Interrupt Enable
+                 
+                 ; UCSRC - USART Control and Status Register C
+                 .equ	UCPOL	= 0	; Clock Polarity
+                 .equ	UCSZ0	= 1	; Character Size
+                 .equ	UCSZ1	= 2	; Character Size
+                 .equ	USBS	= 3	; Stop Bit Select
+                 .equ	UPM0	= 4	; Parity Mode Bit 0
+                 .equ	UPM1	= 5	; Parity Mode Bit 1
+                 .equ	UMSEL	= 6	; USART Mode Select
+                 .equ	URSEL	= 7	; Register Select
+                 
+                 .equ	UBRRHI	= UBRRH	; For compatibility
+                 
+                 ; ***** TWI **************************
+                 ; TWBR - TWI Bit Rate register
+                 .equ	I2BR	= TWBR	; For compatibility
+                 .equ	TWBR0	= 0	; 
+                 .equ	TWBR1	= 1	; 
+                 .equ	TWBR2	= 2	; 
+                 .equ	TWBR3	= 3	; 
+                 .equ	TWBR4	= 4	; 
+                 .equ	TWBR5	= 5	; 
+                 .equ	TWBR6	= 6	; 
+                 .equ	TWBR7	= 7	; 
+                 
+                 ; TWCR - TWI Control Register
+                 .equ	I2CR	= TWCR	; For compatibility
+                 .equ	TWIE	= 0	; TWI Interrupt Enable
+                 .equ	I2IE	= TWIE	; For compatibility
+                 .equ	TWEN	= 2	; TWI Enable Bit
+                 .equ	I2EN	= TWEN	; For compatibility
+                 .equ	ENI2C	= TWEN	; For compatibility
+                 .equ	TWWC	= 3	; TWI Write Collition Flag
+                 .equ	I2WC	= TWWC	; For compatibility
+                 .equ	TWSTO	= 4	; TWI Stop Condition Bit
+                 .equ	I2STO	= TWSTO	; For compatibility
+                 .equ	TWSTA	= 5	; TWI Start Condition Bit
+                 .equ	I2STA	= TWSTA	; For compatibility
+                 .equ	TWEA	= 6	; TWI Enable Acknowledge Bit
+                 .equ	I2EA	= TWEA	; For compatibility
+                 .equ	TWINT	= 7	; TWI Interrupt Flag
+                 .equ	I2INT	= TWINT	; For compatibility
+                 
+                 ; TWSR - TWI Status Register
+                 .equ	I2SR	= TWSR	; For compatibility
+                 .equ	TWPS0	= 0	; TWI Prescaler
+                 .equ	TWS0	= TWPS0	; For compatibility
+                 .equ	I2GCE	= TWPS0	; For compatibility
+                 .equ	TWPS1	= 1	; TWI Prescaler
+                 .equ	TWS1	= TWPS1	; For compatibility
+                 .equ	TWS3	= 3	; TWI Status
+                 .equ	I2S3	= TWS3	; For compatibility
+                 .equ	TWS4	= 4	; TWI Status
+                 .equ	I2S4	= TWS4	; For compatibility
+                 .equ	TWS5	= 5	; TWI Status
+                 .equ	I2S5	= TWS5	; For compatibility
+                 .equ	TWS6	= 6	; TWI Status
+                 .equ	I2S6	= TWS6	; For compatibility
+                 .equ	TWS7	= 7	; TWI Status
+                 .equ	I2S7	= TWS7	; For compatibility
+                 
+                 ; TWDR - TWI Data register
+                 .equ	I2DR	= TWDR	; For compatibility
+                 .equ	TWD0	= 0	; TWI Data Register Bit 0
+                 .equ	TWD1	= 1	; TWI Data Register Bit 1
+                 .equ	TWD2	= 2	; TWI Data Register Bit 2
+                 .equ	TWD3	= 3	; TWI Data Register Bit 3
+                 .equ	TWD4	= 4	; TWI Data Register Bit 4
+                 .equ	TWD5	= 5	; TWI Data Register Bit 5
+                 .equ	TWD6	= 6	; TWI Data Register Bit 6
+                 .equ	TWD7	= 7	; TWI Data Register Bit 7
+                 
+                 ; TWAR - TWI (Slave) Address register
+                 .equ	I2AR	= TWAR	; For compatibility
+                 .equ	TWGCE	= 0	; TWI General Call Recognition Enable Bit
+                 .equ	TWA0	= 1	; TWI (Slave) Address register Bit 0
+                 .equ	TWA1	= 2	; TWI (Slave) Address register Bit 1
+                 .equ	TWA2	= 3	; TWI (Slave) Address register Bit 2
+                 .equ	TWA3	= 4	; TWI (Slave) Address register Bit 3
+                 .equ	TWA4	= 5	; TWI (Slave) Address register Bit 4
+                 .equ	TWA5	= 6	; TWI (Slave) Address register Bit 5
+                 .equ	TWA6	= 7	; TWI (Slave) Address register Bit 6
+                 
+                 
+                 ; ***** WATCHDOG *********************
+                 ; WDTCR - Watchdog Timer Control Register
+                 .equ	WDTCSR	= WDTCR	; For compatibility
+                 .equ	WDP0	= 0	; Watch Dog Timer Prescaler bit 0
+                 .equ	WDP1	= 1	; Watch Dog Timer Prescaler bit 1
+                 .equ	WDP2	= 2	; Watch Dog Timer Prescaler bit 2
+                 .equ	WDE	= 3	; Watch Dog Enable
+                 .equ	WDCE	= 4	; Watchdog Change Enable
+                 .equ	WDTOE	= WDCE	; For compatibility
+                 
+                 
+                 ; ***** PORTB ************************
+                 ; PORTB - Port B Data Register
+                 .equ	PORTB0	= 0	; Port B Data Register bit 0
+                 .equ	PB0	= 0	; For compatibility
+                 .equ	PORTB1	= 1	; Port B Data Register bit 1
+                 .equ	PB1	= 1	; For compatibility
+                 .equ	PORTB2	= 2	; Port B Data Register bit 2
+                 .equ	PB2	= 2	; For compatibility
+                 .equ	PORTB3	= 3	; Port B Data Register bit 3
+                 .equ	PB3	= 3	; For compatibility
+                 .equ	PORTB4	= 4	; Port B Data Register bit 4
+                 .equ	PB4	= 4	; For compatibility
+                 .equ	PORTB5	= 5	; Port B Data Register bit 5
+                 .equ	PB5	= 5	; For compatibility
+                 .equ	PORTB6	= 6	; Port B Data Register bit 6
+                 .equ	PB6	= 6	; For compatibility
+                 .equ	PORTB7	= 7	; Port B Data Register bit 7
+                 .equ	PB7	= 7	; For compatibility
+                 
+                 ; DDRB - Port B Data Direction Register
+                 .equ	DDB0	= 0	; Port B Data Direction Register bit 0
+                 .equ	DDB1	= 1	; Port B Data Direction Register bit 1
+                 .equ	DDB2	= 2	; Port B Data Direction Register bit 2
+                 .equ	DDB3	= 3	; Port B Data Direction Register bit 3
+                 .equ	DDB4	= 4	; Port B Data Direction Register bit 4
+                 .equ	DDB5	= 5	; Port B Data Direction Register bit 5
+                 .equ	DDB6	= 6	; Port B Data Direction Register bit 6
+                 .equ	DDB7	= 7	; Port B Data Direction Register bit 7
+                 
+                 ; PINB - Port B Input Pins
+                 .equ	PINB0	= 0	; Port B Input Pins bit 0
+                 .equ	PINB1	= 1	; Port B Input Pins bit 1
+                 .equ	PINB2	= 2	; Port B Input Pins bit 2
+                 .equ	PINB3	= 3	; Port B Input Pins bit 3
+                 .equ	PINB4	= 4	; Port B Input Pins bit 4
+                 .equ	PINB5	= 5	; Port B Input Pins bit 5
+                 .equ	PINB6	= 6	; Port B Input Pins bit 6
+                 .equ	PINB7	= 7	; Port B Input Pins bit 7
+                 
+                 
+                 ; ***** PORTC ************************
+                 ; PORTC - Port C Data Register
+                 .equ	PORTC0	= 0	; Port C Data Register bit 0
+                 .equ	PC0	= 0	; For compatibility
+                 .equ	PORTC1	= 1	; Port C Data Register bit 1
+                 .equ	PC1	= 1	; For compatibility
+                 .equ	PORTC2	= 2	; Port C Data Register bit 2
+                 .equ	PC2	= 2	; For compatibility
+                 .equ	PORTC3	= 3	; Port C Data Register bit 3
+                 .equ	PC3	= 3	; For compatibility
+                 .equ	PORTC4	= 4	; Port C Data Register bit 4
+                 .equ	PC4	= 4	; For compatibility
+                 .equ	PORTC5	= 5	; Port C Data Register bit 5
+                 .equ	PC5	= 5	; For compatibility
+                 .equ	PORTC6	= 6	; Port C Data Register bit 6
+                 .equ	PC6	= 6	; For compatibility
+                 
+                 ; DDRC - Port C Data Direction Register
+                 .equ	DDC0	= 0	; Port C Data Direction Register bit 0
+                 .equ	DDC1	= 1	; Port C Data Direction Register bit 1
+                 .equ	DDC2	= 2	; Port C Data Direction Register bit 2
+                 .equ	DDC3	= 3	; Port C Data Direction Register bit 3
+                 .equ	DDC4	= 4	; Port C Data Direction Register bit 4
+                 .equ	DDC5	= 5	; Port C Data Direction Register bit 5
+                 .equ	DDC6	= 6	; Port C Data Direction Register bit 6
+                 
+                 ; PINC - Port C Input Pins
+                 .equ	PINC0	= 0	; Port C Input Pins bit 0
+                 .equ	PINC1	= 1	; Port C Input Pins bit 1
+                 .equ	PINC2	= 2	; Port C Input Pins bit 2
+                 .equ	PINC3	= 3	; Port C Input Pins bit 3
+                 .equ	PINC4	= 4	; Port C Input Pins bit 4
+                 .equ	PINC5	= 5	; Port C Input Pins bit 5
+                 .equ	PINC6	= 6	; Port C Input Pins bit 6
+                 
+                 
+                 ; ***** PORTD ************************
+                 ; PORTD - Port D Data Register
+                 .equ	PORTD0	= 0	; Port D Data Register bit 0
+                 .equ	PD0	= 0	; For compatibility
+                 .equ	PORTD1	= 1	; Port D Data Register bit 1
+                 .equ	PD1	= 1	; For compatibility
+                 .equ	PORTD2	= 2	; Port D Data Register bit 2
+                 .equ	PD2	= 2	; For compatibility
+                 .equ	PORTD3	= 3	; Port D Data Register bit 3
+                 .equ	PD3	= 3	; For compatibility
+                 .equ	PORTD4	= 4	; Port D Data Register bit 4
+                 .equ	PD4	= 4	; For compatibility
+                 .equ	PORTD5	= 5	; Port D Data Register bit 5
+                 .equ	PD5	= 5	; For compatibility
+                 .equ	PORTD6	= 6	; Port D Data Register bit 6
+                 .equ	PD6	= 6	; For compatibility
+                 .equ	PORTD7	= 7	; Port D Data Register bit 7
+                 .equ	PD7	= 7	; For compatibility
+                 
+                 ; DDRD - Port D Data Direction Register
+                 .equ	DDD0	= 0	; Port D Data Direction Register bit 0
+                 .equ	DDD1	= 1	; Port D Data Direction Register bit 1
+                 .equ	DDD2	= 2	; Port D Data Direction Register bit 2
+                 .equ	DDD3	= 3	; Port D Data Direction Register bit 3
+                 .equ	DDD4	= 4	; Port D Data Direction Register bit 4
+                 .equ	DDD5	= 5	; Port D Data Direction Register bit 5
+                 .equ	DDD6	= 6	; Port D Data Direction Register bit 6
+                 .equ	DDD7	= 7	; Port D Data Direction Register bit 7
+                 
+                 ; PIND - Port D Input Pins
+                 .equ	PIND0	= 0	; Port D Input Pins bit 0
+                 .equ	PIND1	= 1	; Port D Input Pins bit 1
+                 .equ	PIND2	= 2	; Port D Input Pins bit 2
+                 .equ	PIND3	= 3	; Port D Input Pins bit 3
+                 .equ	PIND4	= 4	; Port D Input Pins bit 4
+                 .equ	PIND5	= 5	; Port D Input Pins bit 5
+                 .equ	PIND6	= 6	; Port D Input Pins bit 6
+                 .equ	PIND7	= 7	; Port D Input Pins bit 7
+                 
+                 
+                 ; ***** EEPROM ***********************
+                 ; EEDR - EEPROM Data Register
+                 .equ	EEDR0	= 0	; EEPROM Data Register bit 0
+                 .equ	EEDR1	= 1	; EEPROM Data Register bit 1
+                 .equ	EEDR2	= 2	; EEPROM Data Register bit 2
+                 .equ	EEDR3	= 3	; EEPROM Data Register bit 3
+                 .equ	EEDR4	= 4	; EEPROM Data Register bit 4
+                 .equ	EEDR5	= 5	; EEPROM Data Register bit 5
+                 .equ	EEDR6	= 6	; EEPROM Data Register bit 6
+                 .equ	EEDR7	= 7	; EEPROM Data Register bit 7
+                 
+                 ; EECR - EEPROM Control Register
+                 .equ	EERE	= 0	; EEPROM Read Enable
+                 .equ	EEWE	= 1	; EEPROM Write Enable
+                 .equ	EEMWE	= 2	; EEPROM Master Write Enable
+                 .equ	EEWEE	= EEMWE	; For compatibility
+                 .equ	EERIE	= 3	; EEPROM Ready Interrupt Enable
+                 
+                 
+                 ; ***** CPU **************************
+                 ; SREG - Status Register
+                 .equ	SREG_C	= 0	; Carry Flag
+                 .equ	SREG_Z	= 1	; Zero Flag
+                 .equ	SREG_N	= 2	; Negative Flag
+                 .equ	SREG_V	= 3	; Two's Complement Overflow Flag
+                 .equ	SREG_S	= 4	; Sign Bit
+                 .equ	SREG_H	= 5	; Half Carry Flag
+                 .equ	SREG_T	= 6	; Bit Copy Storage
+                 .equ	SREG_I	= 7	; Global Interrupt Enable
+                 
+                 ; MCUCR - MCU Control Register
+                 ;.equ	ISC00	= 0	; Interrupt Sense Control 0 Bit 0
+                 ;.equ	ISC01	= 1	; Interrupt Sense Control 0 Bit 1
+                 ;.equ	ISC10	= 2	; Interrupt Sense Control 1 Bit 0
+                 ;.equ	ISC11	= 3	; Interrupt Sense Control 1 Bit 1
+                 .equ	SM0	= 4	; Sleep Mode Select
+                 .equ	SM1	= 5	; Sleep Mode Select
+                 .equ	SM2	= 6	; Sleep Mode Select
+                 .equ	SE	= 7	; Sleep Enable
+                 
+                 ; MCUCSR - MCU Control And Status Register
+                 .equ	MCUSR	= MCUCSR	; For compatibility
+                 .equ	PORF	= 0	; Power-on reset flag
+                 .equ	EXTRF	= 1	; External Reset Flag
+                 .equ	BORF	= 2	; Brown-out Reset Flag
+                 .equ	WDRF	= 3	; Watchdog Reset Flag
+                 
+                 ; OSCCAL - Oscillator Calibration Value
+                 .equ	CAL0	= 0	; Oscillator Calibration Value Bit0
+                 .equ	CAL1	= 1	; Oscillator Calibration Value Bit1
+                 .equ	CAL2	= 2	; Oscillator Calibration Value Bit2
+                 .equ	CAL3	= 3	; Oscillator Calibration Value Bit3
+                 .equ	CAL4	= 4	; Oscillator Calibration Value Bit4
+                 .equ	CAL5	= 5	; Oscillator Calibration Value Bit5
+                 .equ	CAL6	= 6	; Oscillator Calibration Value Bit6
+                 .equ	CAL7	= 7	; Oscillator Calibration Value Bit7
+                 
+                 ; SPMCR - Store Program Memory Control Register
+                 .equ	SPMEN	= 0	; Store Program Memory Enable
+                 .equ	PGERS	= 1	; Page Erase
+                 .equ	PGWRT	= 2	; Page Write
+                 .equ	BLBSET	= 3	; Boot Lock Bit Set
+                 .equ	RWWSRE	= 4	; Read-While-Write Section Read Enable
+                 .equ	RWWSB	= 6	; Read-While-Write Section Busy
+                 .equ	SPMIE	= 7	; SPM Interrupt Enable
+                 
+                 ; SFIOR - Special Function IO Register
+                 .equ	PSR10	= 0	; Prescaler Reset Timer/Counter1 and Timer/Counter0
+                 .equ	PUD	= 2	; Pull-up Disable
+                 .equ	ADHSM	= 4	; ADC High Speed Mode
+                 
+                 
+                 ; ***** AD_CONVERTER *****************
+                 ; ADMUX - The ADC multiplexer Selection Register
+                 .equ	MUX0	= 0	; Analog Channel and Gain Selection Bits
+                 .equ	MUX1	= 1	; Analog Channel and Gain Selection Bits
+                 .equ	MUX2	= 2	; Analog Channel and Gain Selection Bits
+                 .equ	MUX3	= 3	; Analog Channel and Gain Selection Bits
+                 .equ	ADLAR	= 5	; Left Adjust Result
+                 .equ	REFS0	= 6	; Reference Selection Bit 0
+                 .equ	REFS1	= 7	; Reference Selection Bit 1
+                 
+                 ; ADCSRA - The ADC Control and Status register
+                 .equ	ADCSR	= ADCSRA	; For compatibility
+                 .equ	ADPS0	= 0	; ADC  Prescaler Select Bits
+                 .equ	ADPS1	= 1	; ADC  Prescaler Select Bits
+                 .equ	ADPS2	= 2	; ADC  Prescaler Select Bits
+                 .equ	ADIE	= 3	; ADC Interrupt Enable
+                 .equ	ADIF	= 4	; ADC Interrupt Flag
+                 .equ	ADFR	= 5	; ADC  Free Running Select
+                 .equ	ADSC	= 6	; ADC Start Conversion
+                 .equ	ADEN	= 7	; ADC Enable
+                 
+                 
+                 
+                 ; ***** LOCKSBITS ********************************************************
+                 .equ	LB1	= 0	; Lock bit
+                 .equ	LB2	= 1	; Lock bit
+                 .equ	BLB01	= 2	; Boot Lock bit
+                 .equ	BLB02	= 3	; Boot Lock bit
+                 .equ	BLB11	= 4	; Boot lock bit
+                 .equ	BLB12	= 5	; Boot lock bit
+                 
+                 
+                 ; ***** FUSES ************************************************************
+                 ; LOW fuse bits
+                 .equ	CKSEL0	= 0	; Select Clock Source
+                 .equ	CKSEL1	= 1	; Select Clock Source
+                 .equ	CKSEL2	= 2	; Select Clock Source
+                 .equ	CKSEL3	= 3	; Select Clock Source
+                 .equ	SUT0	= 4	; Select start-up time
+                 .equ	SUT1	= 5	; Select start-up time
+                 .equ	BODEN	= 6	; Brown out detector enable
+                 .equ	BODLEVEL	= 7	; Brown out detector trigger level
+                 
+                 ; HIGH fuse bits
+                 .equ	BOOTRST	= 0	; Select Reset Vector
+                 .equ	BOOTSZ0	= 1	; Select Boot Size
+                 .equ	BOOTSZ1	= 2	; Select Boot Size
+                 .equ	EESAVE	= 3	; EEPROM memory is preserved through chip erase
+                 .equ	CKOPT	= 4	; Oscillator Options
+                 .equ	SPIEN	= 5	; Enable Serial programming and Data Downloading
+                 .equ	WTDON	= 6	; Enable watchdog
+                 .equ	RSTDISBL	= 7	; Disable reset
+                 
+                 
+                 
+                 ; ***** CPU REGISTER DEFINITIONS *****************************************
+                 .def	XH	= r27
+                 .def	XL	= r26
+                 .def	YH	= r29
+                 .def	YL	= r28
+                 .def	ZH	= r31
+                 .def	ZL	= r30
+                 
+                 
+                 
+                 ; ***** DATA MEMORY DECLARATIONS *****************************************
+                 .equ	FLASHEND	= 0x0fff	; Note: Word address
+                 .equ	IOEND	= 0x003f
+                 .equ	SRAM_START	= 0x0060
+                 .equ	SRAM_SIZE	= 1024
+                 .equ	RAMEND	= 0x045f
+                 .equ	XRAMEND	= 0x0000
+                 .equ	E2END	= 0x01ff
+                 .equ	EEPROMEND	= 0x01ff
+                 .equ	EEADRBITS	= 9
+                 #pragma AVRPART MEMORY PROG_FLASH 8192
+                 #pragma AVRPART MEMORY EEPROM 512
+                 #pragma AVRPART MEMORY INT_SRAM SIZE 1024
+                 #pragma AVRPART MEMORY INT_SRAM START_ADDR 0x60
+                 
+                 
+                 
+                 ; ***** BOOTLOADER DECLARATIONS ******************************************
+                 .equ	NRWW_START_ADDR	= 0xc00
+                 .equ	NRWW_STOP_ADDR	= 0xfff
+                 .equ	RWW_START_ADDR	= 0x0
+                 .equ	RWW_STOP_ADDR	= 0xbff
+                 .equ	PAGESIZE	= 32
+                 .equ	FIRSTBOOTSTART	= 0xf80
+                 .equ	SECONDBOOTSTART	= 0xf00
+                 .equ	THIRDBOOTSTART	= 0xe00
+                 .equ	FOURTHBOOTSTART	= 0xc00
+                 .equ	SMALLBOOTSTART	= FIRSTBOOTSTART
+                 .equ	LARGEBOOTSTART	= FOURTHBOOTSTART
+                 
+                 
+                 
+                 ; ***** INTERRUPT VECTORS ************************************************
+                 .equ	INT0addr	= 0x0001	; External Interrupt Request 0
+                 .equ	INT1addr	= 0x0002	; External Interrupt Request 1
+                 .equ	OC2addr	= 0x0003	; Timer/Counter2 Compare Match
+                 .equ	OVF2addr	= 0x0004	; Timer/Counter2 Overflow
+                 .equ	ICP1addr	= 0x0005	; Timer/Counter1 Capture Event
+                 .equ	OC1Aaddr	= 0x0006	; Timer/Counter1 Compare Match A
+                 .equ	OC1Baddr	= 0x0007	; Timer/Counter1 Compare Match B
+                 .equ	OVF1addr	= 0x0008	; Timer/Counter1 Overflow
+                 .equ	OVF0addr	= 0x0009	; Timer/Counter0 Overflow
+                 .equ	SPIaddr	= 0x000a	; Serial Transfer Complete
+                 .equ	URXCaddr	= 0x000b	; USART, Rx Complete
+                 .equ	UDREaddr	= 0x000c	; USART Data Register Empty
+                 .equ	UTXCaddr	= 0x000d	; USART, Tx Complete
+                 .equ	ADCCaddr	= 0x000e	; ADC Conversion Complete
+                 .equ	ERDYaddr	= 0x000f	; EEPROM Ready
+                 .equ	ACIaddr	= 0x0010	; Analog Comparator
+                 .equ	TWIaddr	= 0x0011	; 2-wire Serial Interface
+                 .equ	SPMRaddr	= 0x0012	; Store Program Memory Ready
+                 
+                 .equ	INT_VECTORS_SIZE	= 19	; size in words
+                 
+                 #pragma AVRPART CORE INSTRUCTIONS_NOT_SUPPORTED break
+                 
+                 #endif  /* _M8DEF_INC_ */
+                 
+                 ; ***** END OF FILE ******************************************************
+                 
+                  * lab2.asm
+                  *
+                  *  Created: 24/08/2015 4:20:02 p.m.
+                  *   Author: ameh428, dalv414
+                  */ 
+                 
+                 .list						;Turn listfile generation On
+                 
+                 ;Define Bits for indicator Data
+                 .equ	RSTATUS = 0
+                 .equ	LSTATUS = 1
+                 .equ	RFLASH = 2
+                 .equ	LFLASH = 3
+                 .equ    RCOND = 4
+                 .equ    LCOND = 5
+                 .equ	RPSTATE = 6
+                 .equ	LPSTATE	= 7
+                 
+                 ;Define Bits for car door Data
+                 .equ	CDLEDON = 0
+                 .equ	CDSTATE	= 1	
+                 
+                 ;Define Bits for r28 (The Priority Status Register)
+                 .equ    MTASK_HOLD = 6
+                 .equ    MTASK_QUEUE = 7
+                 
+                 ;Define threshold force
+                 .equ	THRESHOLDFORCE = 4
+                 
+                 ;Define Reserved Registers
+                 .def	ISREG = r16
+                 
+                 ;Define indicator overflow (clock = 1.25ms)
+                 .equ	LONGFLASH = 400		
+                 .equ	SHORTFLASH = 200		
+                 
+                 .dseg 						; Start data segment
+                 .org 0x67 					; Set SRAM address to hex 67
+                 
+000067           pulseWidth:				.byte 1		
+000068           fuelInjectionCounts:	.byte 1
+000069           rightIndCounterH:		.byte 1
+00006a           rightIndCounterL:		.byte 1
+00006b           leftIndCounterH:		.byte 1
+00006c           leftIndCounterL:		.byte 1
+00006d           tempCelsius:			.byte 1
+00006e           waterLevelLitres:		.byte 1 
+                 
+                 .cseg
+                 .org $00000					;Setting Origin Address
+000000 c2b0      		rjmp Main 			;Reset vector
+                 .org OVF0addr				;Setting Origin Address
+000009 c2d6      		rjmp ClockTick 		;ClockTick vector
+                 .org ADCCaddr						;Setting Origin Address
+00000e c413      		rjmp Collision_Detection
+                 
+                 .org   0x0100               ;table address engine speed (RPM) and load
+                 ;Load/RPM('000)
+                 RPMLoad_Lookup:			;1/1	2/1		3/1		4/1		1/2		2/2 	3/2		4/2		1/3		2/3		3/3		4/3		1/4		2/4		3/4		4/4   
+000100 0201
+000101 0403
+000102 0402
+000103 0806
+000104 0603
+000105 0c09
+000106 0804
+000107 100c      	        .db			0x01,	0x02,	0x03,	0x04,	0x02,	0x04,	0x06,	0x08,	0x03,	0x06,	0x09,	0x0C,	0x04,	0x08,	0x0C,	0x10
+                 ;FactorA * 10
+                 FactorA_Lookup:			;0		25		50		75		
+000108 0b0c
+000109 090a      			.db			0x0c,	0x0b,	0x0a,	0x09	
+                 ;FactorB * 4				
+                 FactorB_Lookup:			;1		2		3		4		
+00010a 0404
+00010b 0304      			.db			0x04,	0x04,	0x04,	0x03	
+                 	
+                 .org $00200					;Setting Origin Address
+                 .include "MECHENG313A.inc"	;Functions needed for MECHENG313
+                 
+                 
+                 ;**** A P P L I C A T I O N   N O T E   A V R 2 0 1 ***************************
+                 ;*
+                 ;* Title		: 16bit multiply routines using hardware multiplier
+                 ;* Version		: V1.0
+                 ;* Last updated		: 5 Apr, 1999
+                 ;* Target		: ATmega83/161/163
+                 ;*
+                 ;* Support email	: avr@atmel.com
+                 ;*
+                 ;* DESCRIPTION
+                 ;* 	This application note shows a number of examples of how to implement
+                 ;*	16bit multiplication using hardware multiplier. Refer to each of the
+                 ;*	funtions headers for details. The functions included in this file
+                 ;*	are :
+                 ;*
+                 ;*	mul16x16_16	- Multiply of two 16bits numbers with 16bits result.
+                 ;*	mul16x16_32	- Unsigned multiply of two 16bits numbers with 32bits
+                 ;*			  result.
+                 ;*	muls16x16_32	- Signed multiply of two 16bits numbers with 32bits
+                 ;*			  result.
+                 ;*	mac16x16_32	- Signed multiply accumulate of two 16bits numbers
+                 ;*			  with a 32bits result.
+                 ;*	fmuls16x16_32	- Signed fractional multiply of two 16bits numbers
+                 ;*			  with 32bits result.
+                 ;*	fmac16x16_32	- Signed fractional multiply accumulate of two 16bits
+                 ;*			  numbers with a 32bits result.
+                 ;*
+                 ;******************************************************************************
+                 
+                 
+                 ;******************************************************************************
+                 ;*
+                 ;* FUNCTION
+                 ;*	mul16x16_16
+                 ;* DECRIPTION
+                 ;*	Multiply of two 16bits numbers with 16bits result.
+                 ;* USAGE
+                 ;*	r17:r16 = r23:r22 * r21:r20
+                 ;* STATISTICS
+                 ;*	Cycles :	9 + ret
+                 ;*	Words :		6 + ret
+                 ;*	Register usage: r0, r1 and r16 to r23 (8 registers)
+                 ;* NOTE
+                 ;*	Full orthogonality i.e. any register pair can be used as long as
+                 ;*	the result and the two operands does not share register pairs.
+                 ;*	The routine is non-destructive to the operands.
+                 ;*
+                 ;******************************************************************************
+                 
+                 mul16x16_16:
+000200 9f64      	mul	r22, r20		; al * bl
+000201 0180      	movw	r17:r16, r1:r0
+000202 9f74      	mul	r23, r20		; ah * bl
+000203 0d10      	add	r17, r0
+000204 9f56      	mul	r21, r22		; bh * al
+000205 0d10      	add	r17, r0
+000206 9508      	ret
+                 
+                 
+                 ;******************************************************************************
+                 ;*
+                 ;* FUNCTION
+                 ;*	mul16x16_32
+                 ;* DECRIPTION
+                 ;*	Unsigned multiply of two 16bits numbers with 32bits result.
+                 ;* USAGE
+                 ;*	r19:r18:r17:r16 = r23:r22 * r21:r20
+                 ;* STATISTICS
+                 ;*	Cycles :	17 + ret
+                 ;*	Words :		13 + ret
+                 ;*	Register usage: r0 to r2 and r16 to r23 (11 registers)
+                 ;* NOTE
+                 ;*	Full orthogonality i.e. any register pair can be used as long as
+                 ;*	the 32bit result and the two operands does not share register pairs.
+                 ;*	The routine is non-destructive to the operands.
+                 ;*
+                 ;******************************************************************************
+                 
+                 mul16x16_32:
+000207 2422      	clr	r2
+000208 9f75      	mul	r23, r21		; ah * bh
+000209 0190      	movw	r19:r18, r1:r0
+00020a 9f64      	mul	r22, r20		; al * bl
+00020b 0180      	movw	r17:r16, r1:r0
+00020c 9f74      	mul	r23, r20		; ah * bl
+00020d 0d10      	add	r17, r0
+00020e 1d21      	adc	r18, r1
+00020f 1d32      	adc	r19, r2
+000210 9f56      	mul	r21, r22		; bh * al
+000211 0d10      	add	r17, r0
+000212 1d21      	adc	r18, r1
+000213 1d32      	adc	r19, r2
+000214 9508      	ret
+                 
+                 
+                 ;******************************************************************************
+                 ;*
+                 ;* FUNCTION
+                 ;*	muls16x16_32
+                 ;* DECRIPTION
+                 ;*	Signed multiply of two 16bits numbers with 32bits result.
+                 ;* USAGE
+                 ;*	r19:r18:r17:r16 = r23:r22 * r21:r20
+                 ;* STATISTICS
+                 ;*	Cycles :	19 + ret
+                 ;*	Words :		15 + ret
+                 ;*	Register usage: r0 to r2 and r16 to r23 (11 registers)
+                 ;* NOTE
+                 ;*	The routine is non-destructive to the operands.
+                 ;*
+                 ;******************************************************************************
+                 
+                 muls16x16_32:
+000215 2422      	clr	r2
+000216 0275      	muls	r23, r21		; (signed)ah * (signed)bh
+000217 0190      	movw	r19:r18, r1:r0
+000218 9f64      	mul	r22, r20		; al * bl
+000219 0180      	movw	r17:r16, r1:r0
+00021a 0374      	mulsu	r23, r20		; (signed)ah * bl
+00021b 0932      	sbc	r19, r2
+00021c 0d10      	add	r17, r0
+00021d 1d21      	adc	r18, r1
+00021e 1d32      	adc	r19, r2
+00021f 0356      	mulsu	r21, r22		; (signed)bh * al
+000220 0932      	sbc	r19, r2
+000221 0d10      	add	r17, r0
+000222 1d21      	adc	r18, r1
+000223 1d32      	adc	r19, r2
+000224 9508      	ret
+                 
+                 
+                 ;******************************************************************************
+                 ;*
+                 ;* FUNCTION
+                 ;*	mac16x16_32
+                 ;* DECRIPTION
+                 ;*	Signed multiply accumulate of two 16bits numbers with
+                 ;*	a 32bits result.
+                 ;* USAGE
+                 ;*	r19:r18:r17:r16 += r23:r22 * r21:r20
+                 ;* STATISTICS
+                 ;*	Cycles :	23 + ret
+                 ;*	Words :		19 + ret
+                 ;*	Register usage: r0 to r2 and r16 to r23 (11 registers)
+                 ;*
+                 ;******************************************************************************
+                 
+                 mac16x16_32:
+000225 2422      	clr	r2
+                 
+000226 0275      	muls	r23, r21		; (signed)ah * (signed)bh
+000227 0d20      	add	r18, r0
+000228 1d31      	adc	r19, r1
+                 
+000229 9f64      	mul	r22, r20		; al * bl
+00022a 0d00      	add	r16, r0
+00022b 1d11      	adc	r17, r1
+00022c 1d22      	adc	r18, r2
+00022d 1d32      	adc	r19, r2
+                 
+00022e 0374      	mulsu	r23, r20		; (signed)ah * bl
+00022f 0932      	sbc	r19, r2
+000230 0d10      	add	r17, r0
+000231 1d21      	adc	r18, r1
+000232 1d32      	adc	r19, r2
+                 
+000233 0356      	mulsu	r21, r22		; (signed)bh * al
+000234 0932      	sbc	r19, r2
+000235 0d10      	add	r17, r0
+000236 1d21      	adc	r18, r1
+000237 1d32      	adc	r19, r2
+                 
+000238 9508      	ret
+                 
+                 mac16x16_32_method_B:			; uses two temporary registers
+                 					; (r4,r5), but reduces cycles/words
+                 					; by 1
+000239 2422      	clr	r2
+                 
+00023a 0275      	muls	r23, r21		; (signed)ah * (signed)bh
+00023b 0120      	movw	r5:r4,r1:r0
+                 
+00023c 9f64      	mul	r22, r20		; al * bl
+                 
+00023d 0d00      	add	r16, r0
+00023e 1d11      	adc	r17, r1
+00023f 1d24      	adc	r18, r4
+000240 1d35      	adc	r19, r5
+                 
+000241 0374      	mulsu	r23, r20		; (signed)ah * bl
+000242 0932      	sbc	r19, r2
+000243 0d10      	add	r17, r0
+000244 1d21      	adc	r18, r1
+000245 1d32      	adc	r19, r2
+                 
+000246 0356      	mulsu	r21, r22		; (signed)bh * al
+000247 0932      	sbc	r19, r2
+000248 0d10      	add	r17, r0
+000249 1d21      	adc	r18, r1
+00024a 1d32      	adc	r19, r2
+                 
+00024b 9508      	ret
+                 
+                 
+                 ;******************************************************************************
+                 ;*
+                 ;* FUNCTION
+                 ;*	fmuls16x16_32
+                 ;* DECRIPTION
+                 ;*	Signed fractional multiply of two 16bits numbers with 32bits result.
+                 ;* USAGE
+                 ;*	r19:r18:r17:r16 = ( r23:r22 * r21:r20 ) << 1
+                 ;* STATISTICS
+                 ;*	Cycles :	20 + ret
+                 ;*	Words :		16 + ret
+                 ;*	Register usage: r0 to r2 and r16 to r23 (11 registers)
+                 ;* NOTE
+                 ;*	The routine is non-destructive to the operands.
+                 ;*
+                 ;******************************************************************************
+                 
+                 fmuls16x16_32:
+00024c 2422      	clr	r2
+00024d 03f5      	fmuls	r23, r21		; ( (signed)ah * (signed)bh ) << 1
+00024e 0190      	movw	r19:r18, r1:r0
+00024f 036c      	fmul	r22, r20		; ( al * bl ) << 1
+000250 1d22      	adc	r18, r2
+000251 0180      	movw	r17:r16, r1:r0
+000252 03fc      	fmulsu	r23, r20		; ( (signed)ah * bl ) << 1
+000253 0932      	sbc	r19, r2
+000254 0d10      	add	r17, r0
+000255 1d21      	adc	r18, r1
+000256 1d32      	adc	r19, r2
+000257 03de      	fmulsu	r21, r22		; ( (signed)bh * al ) << 1
+000258 0932      	sbc	r19, r2
+000259 0d10      	add	r17, r0
+00025a 1d21      	adc	r18, r1
+00025b 1d32      	adc	r19, r2
+00025c 9508      	ret
+                 
+                 	
+                 ;******************************************************************************
+                 ;*
+                 ;* FUNCTION
+                 ;*	fmac16x16_32
+                 ;* DECRIPTION
+                 ;*	Signed fractional multiply accumulate of two 16bits numbers with
+                 ;*	a 32bits result.
+                 ;* USAGE
+                 ;*	r19:r18:r17:r16 += (r23:r22 * r21:r20) << 1
+                 ;* STATISTICS
+                 ;*	Cycles :	25 + ret
+                 ;*	Words :		21 + ret
+                 ;*	Register usage: r0 to r2 and r16 to r23 (11 registers)
+                 ;*
+                 ;******************************************************************************
+                 
+                 fmac16x16_32:
+00025d 2422      	clr	r2
+                 
+00025e 03f5      	fmuls	r23, r21		; ( (signed)ah * (signed)bh ) << 1
+00025f 0d20      	add	r18, r0
+000260 1d31      	adc	r19, r1
+                 
+000261 036c      	fmul	r22, r20		; ( al * bl ) << 1
+000262 1d22      	adc	r18, r2
+000263 1d32      	adc	r19, r2
+000264 0d00      	add	r16, r0
+000265 1d11      	adc	r17, r1
+000266 1d22      	adc	r18, r2
+000267 1d32      	adc	r19, r2
+                 
+000268 03fc      	fmulsu	r23, r20		; ( (signed)ah * bl ) << 1
+000269 0932      	sbc	r19, r2
+00026a 0d10      	add	r17, r0
+00026b 1d21      	adc	r18, r1
+00026c 1d32      	adc	r19, r2
+                 
+00026d 03de      	fmulsu	r21, r22		; ( (signed)bh * al ) << 1
+00026e 0932      	sbc	r19, r2
+00026f 0d10      	add	r17, r0
+000270 1d21      	adc	r18, r1
+000271 1d32      	adc	r19, r2
+                 
+000272 9508      	ret
+                 
+                 fmac16x16_32_method_B:			; uses two temporary registers
+                 					; (r4,r5), but reduces cycles/words
+                 					; by 2
+000273 2422      	clr	r2
+                 
+000274 03f5      	fmuls	r23, r21		; ( (signed)ah * (signed)bh ) << 1
+000275 0120      	movw	r5:r4,r1:r0
+000276 036c      	fmul	r22, r20		; ( al * bl ) << 1
+000277 1c42      	adc	r4, r2
+                 
+000278 0d00      	add	r16, r0
+000279 1d11      	adc	r17, r1
+00027a 1d24      	adc	r18, r4
+00027b 1d35      	adc	r19, r5
+                 
+00027c 03fc      	fmulsu	r23, r20		; ( (signed)ah * bl ) << 1
+00027d 0932      	sbc	r19, r2
+00027e 0d10      	add	r17, r0
+00027f 1d21      	adc	r18, r1
+000280 1d32      	adc	r19, r2
+000281 03de      	fmulsu	r21, r22		; ( (signed)bh * al ) << 1
+000282 0932      	sbc	r19, r2
+000283 0d10      	add	r17, r0
+000284 1d21      	adc	r18, r1
+000285 1d32      	adc	r19, r2
+                 
+000286 9508      	ret
+                 
+                 
+                 ;***************************************************************************
+                 ;*
+                 ;* "div24x24_24" - 24/24 Bit Unsigned Division
+                 ;*
+                 ;* This subroutine divides the two 24-bit numbers 
+                 ;* "r24:r23:r22" (dividend) and "r21:r20:r19" (divisor). 
+                 ;* The result is placed in "r24:r23:r22" and the remainder in
+                 ;* "r18:r17:r16".
+                 ;*  
+                 ;* Number of words	:
+                 ;* Number of cycles	:
+                 ;* Low registers used	:3 (r16,r17 r18)
+                 ;* High registers used  :6 (r19/r22, r20/r23, r21/r24,r19,r20,r21)
+                 ;* r24:r23:r22 = r24:r23:r22 / r21:r20:r19
+                 ;***************************************************************************
+                 
+                 ;***** Subroutine Register Variables
+                 div24x24_24:
+                 ;***** Code
+                 
+000287 2700      	clr	r16	;clear remainder Low byte
+000288 2711      	clr r17
+000289 1b22      	sub	r18,r18;clear remainder High byte and carry
+00028a e199      	ldi	r25,25	;init loop counter
+00028b 1f66      d24u_1:	rol	r22		;shift left dividend
+00028c 1f77      	rol r23
+00028d 1f88      	rol	r24
+00028e 959a      	dec	r25		;decrement counter
+00028f f409      	brne	d24u_2		;if done
+000290 9508      	ret			;    return
+000291 1f00      d24u_2:	rol	r16	;shift dividend into remainder
+000292 1f11      	rol r17
+000293 1f22      	rol	r18
+000294 1b03      	sub	r16,r19	;remainder = remainder - divisor
+000295 0b14      	sbc r17,r20 ;
+000296 0b25      	sbc	r18,r21	;
+000297 f428      	brcc	d24u_3		;if result negative
+000298 0f03      	add	r16,r19	;    restore remainder
+000299 1f14      	adc r17,r20
+00029a 1f25      	adc	r18,r21
+00029b 9488      	clc			;    clear carry to be shifted into result
+00029c cfee      	rjmp	d24u_1		;else
+00029d 9408      d24u_3:	sec			;    set carry to be shifted into result
+00029e cfec      	rjmp	d24u_1
+                 	
+00029f 9508      	ret
+                 	
+                 
+                 ;***************************************************************************
+                 ;*
+                 ;* "div8u" - 8/8 Bit Unsigned Division
+                 ;*
+                 ;* This subroutine divides the two register variables "dd8u" (dividend) and 
+                 ;* "dv8u" (divisor). The result is placed in "dres8u" and the remainder in
+                 ;* "drem8u".
+                 ;*  
+                 ;* Number of words	:14
+                 ;* Number of cycles	:97
+                 ;* Low registers used	:1 (drem8u)
+                 ;* High registers used  :3 (dres8u/dd8u,dv8u,dcnt8u)
+                 ;* r21 = r21/r22
+                 ;***************************************************************************
+                 
+                 ;***** Subroutine Register Variables
+                 
+                 ;r20		;remainder
+                 ;r21		;result
+                 ;r21		;dividend
+                 ;r22		;divisor
+                 ;r23		;loop counter
+                 
+                 ;***** Code
+                 
+0002a0 1b44      div8u:	sub	r20,r20	;clear remainder and carry
+0002a1 e079      		ldi	r23,9	;init loop counter
+0002a2 1f55      d8u_1:	rol	r21		;shift left dividend
+0002a3 957a      		dec	r23		;decrement counter
+0002a4 f409      		brne	d8u_2		;if done
+0002a5 9508      		ret			;    return
+0002a6 1f44      d8u_2:	rol	r20		;shift dividend into remainder
+0002a7 1b46      		sub	r20,r22	;remainder = remainder - divisor
+0002a8 f418      		brcc	d8u_3		;if result negative
+0002a9 0f46      		add	r20,r22	;    restore remainder
+0002aa 9488      		clc			;    clear carry to be shifted into result
+0002ab cff6      		rjmp	d8u_1		;else
+0002ac 9408      d8u_3:	sec			;    set carry to be shifted into result
+0002ad cff4      		rjmp	d8u_1
+                 
+                 
+                 
+                 ;***************************************************************************
+                 ;*
+                 ;* Mecheng 313
+                 ;*
+                 ;* 
+                 ;*
+                 ;* 
+                 ;* 
+                 ;*  
+                 ;* 
+                 ;*
+                 ;* 
+                 ;* 
+                 ;* 	
+                 ;***************************************************************************
+                 
+                 
+                 .equ	ClockTick_Task = 2
+                 .equ	UpTime = -1	
+                 
+                 System_Monitor:
+0002ae dfd8      				rcall div24x24_24
+0002af dff0      				rcall div8u
+0002b0 9508      				ret
+                 
+                 .MACRO Start_Task ; Start macro definition
+                 		sbi DDRC,(PC4 + @0)
+                 		sbi PORTC,(PC4 + @0)
+                 .ENDMACRO
+                 
+                 .MACRO End_Task ; Start macro definition
+                 		cbi PORTC,(PC4 +@0)
+                 .ENDMACRO
+                 
+                 
+                 ;**** End of File ****
+                 	
+                 
+                 ;***************** Start of Main *****************                                
+                 Main: 
+                 
+                 		;*******Initialise Stack Pointer*******
+0002b1 e50f      		ldi r16,LOW(RAMEND) 	;Loading Lower Ram end address in to r16
+0002b2 bf0d      		out SPL,r16				;Init Stack Pointer Lower Bytes
+0002b3 e004      		ldi r16,HIGH(RAMEND)	;Loading Higher Ram end address in to r16
+0002b4 bf0e      		out SPH,r16				;Init Stack Pointer Higher Bytes
+                 		
+                 		;*******I/O Setup*******
+0002b5 ef0f      		ldi r16, 0xFF
+0002b6 bb07      		out DDRB,r16  ; PORT B is Output
+0002b7 bb08      		out PORTB,r16 ; initialise LEDs as OFF
+0002b8 bb04      		out DDRC, r16 ; PORT C is Output
+                 
+                 		;********* ADC ********
+                 		; set MUX to channel 2, left adjust the result, AREF taken from AVCC
+0002b9 e001      		ldi r16, (1<<MUX0) ; ADMUX channel 2, AREF from AVCC PORTC
+0002ba b907      		out ADMUX,r16
+                 		; switch AD conversion on, start conversion, divider rate = 16
+0002bb ee0c      		ldi r16, (1<<ADEN)|(1<<ADSC)|(1<<ADPS2)|(1<<ADFR)|(1<<ADIE) ; switch AD conversion on
+0002bc b906      		out ADCSRA,r16
+                 
+                 
+0002bd 98a1      		cbi DDRC,PC1		;PC1 is used for ADC
+                 
+                 		;********* ClockTick 8-bit Timer/Counter 0 *******      
+0002be e003      		ldi r16, (1<<CS01)|(1<<CS00)            
+0002bf bf03            	out TCCR0, r16			; Timer Clock = Sys Clock (1MHz) / 64 (prescaler)
+0002c0 e001      		ldi r16, (1<<TOIE0)            
+0002c1 bf09      		out TIMSK, r16			; Enable Timer Overflow interrupt
+                 
+0002c2 ed09      		ldi r16, 217		; MaxValue = TOVck (1.5ms or your Cal time) * Pck (1MHz) / 8 (prescaler)
+0002c3 bf02      		out TCNT0, r16			; TCNT0Value = 255 - MaxValue
+                 	
+0002c4 9478      		sei ; enable interrupts and off we go!
+                 
+                 
+                 
+                 		;*******Counters and Indicators Setup*******
+                 		;Initialise indicator counters to 0 and Fuel Injection Counter to 1
+0002c5 e000      		ldi r16, $00
+0002c6 e010      		ldi r17, $00
+0002c7 9310 0069 		sts rightIndCounterH, r17
+0002c9 9300 006a 		sts	rightIndCounterL, r16
+0002cb 9310 006b 		sts	leftIndCounterH, r17
+0002cd 9300 006c 		sts	leftIndCounterL, r16
+                 
+0002cf e001      		ldi r16, $01			
+0002d0 9300 0068 		sts fuelInjectionCounts, r16
+0002d2 9300 0067 		sts pulseWidth, r16
+                 
+0002d4 ef0f      		ldi ISREG, $ff ;set all flags to 1
+0002d5 60c3      		sbr r28, (1<<CDLEDON)|(1<<CDSTATE) ;initialise LED to off in
+                 		
+                 		;********* Main infinite loop ********
+                 forever:
+                 		
+0002d6 64c0      		sbr r28, (1<<MTASK_HOLD) ;While asynchronous tasks do not excute Monitoring Tasks
+                 
+0002d7 d0fc      		rcall Left_Status_Switch
+0002d8 d102      		rcall Right_Status_Switch
+0002d9 d108      		rcall Left_Condition_Toggle
+0002da d11b      		rcall Right_Condition_Toggle
+0002db d12e      		rcall Left_LED_Toggle
+0002dc d133      		rcall Right_LED_Toggle
+0002dd d0a7      		rcall Car_Door_Indicator
+                 
+0002de 7bcf      		cbr r28, (1<<MTASK_HOLD) ;While the button is pressed do not excute Monitoring Tasks
+                 
+0002df cff6      		rjmp forever 
+                 ;***************** End of program *****************
+                 
+                 ;******* Start of Clock Tick *******
+                 ClockTick:
+0002e0 9aac      		sbi PORTC, PC4
+                 		
+0002e1 9478      		sei ; Allow interrupts to give ADC interrupt priority
+                 
+                 		;Push registers icluding SREG to prevent overwriting data 
+0002e2 931f      		push r17
+0002e3 932f      		push r18
+0002e4 933f      		push r19
+0002e5 934f      		push r20
+0002e6 935f      		push r21
+0002e7 936f      		push r22
+0002e8 937f      		push r23
+0002e9 938f      		push r24
+0002ea 939f      		push r25
+0002eb 93af      		push r26
+0002ec 93bf      		push r27
+0002ed 93df      		push r29
+0002ee 93ef      		push r30
+0002ef 93ff      		push r31
+0002f0 b71f      		in r17, SREG
+0002f1 931f      		push r17
+                 		
+                 		; reset counter
+0002f2 ed29      		ldi r18, 217
+0002f3 bf22      		out TCNT0, r18 
+                 		
+                 		;Start synchronous tasks
+                 
+0002f4 d050      		rcall Fuel_Injection_Counter	;Run the Fuel Injection Calculation if the Clock Tick count is correct
+0002f5 d0a4      		rcall Left_Indicator_Manager	;Run Left Indicator Manager
+0002f6 d0b0      		rcall Right_Indicator_Manager	;Run Right Indicator Manager
+                 
+                 		; Check if higher priority tasks are running before executing Monitoring Tasks
+0002f7 fbc6      		bst r28, MTASK_HOLD 
+0002f8 f016      		brts runMonitoringTasks
+                 		addToQueue:							;If a higher priority task is running, add it to a queue
+0002f9 68c0      			sbr r28, (1<<MTASK_QUEUE) 
+0002fa c001      			rjmp endMonitoringTasks
+                 		runMonitoringTasks:					;Else run Monitoring Tasks
+0002fb d060      			rcall Monitoring_Tasks
+                 		endMonitoringTasks:
+                 		
+                 		;Push registers icluding SREG to restore data
+0002fc 911f      		pop r17
+0002fd bf1f      		out SREG, r17
+0002fe 91ff      		pop r31
+0002ff 91ef      		pop r30
+000300 91df      		pop r29
+000301 91bf      		pop r27
+000302 91af      		pop r26
+000303 919f      		pop r25
+000304 918f      		pop r24
+000305 917f      		pop r23
+000306 916f      		pop r22
+000307 915f      		pop r21
+000308 914f      		pop r20
+000309 913f      		pop r19
+00030a 912f      		pop r18
+00030b 911f      		pop r17
+                 		
+00030c 98ac      		cbi PORTC, PC4	;Turn output indicator pin Off
+00030d 9518      		RETI						;Return from Interurpt
+                 ;******* End of Clock Tick *******
+                 
+                 ;******* Start of FuelInjectionTimingCalc *******
+                 Fuel_Injection_Timing_Calc:
+00030e 9aad      		sbi PORTC, PC5;Turn output indicator pin On
+                 
+                 ;This task contains the algorithms to determine the fuel indjection pulseWidth.
+                 ;The task reads an input from the ADCL register to determine the operating
+                 ;conditions and calculates pulseWidth using the following formula:
+                 ;pulseWidth = (basePulseWidth * factorA(scaled) * factorB(scaled)) / 40
+                 		
+00030f 930f      		push ISREG	;store indicator SREG on stack to free r16 for use
+                 
+000310 b104      		in r16, ADCL
+000311 2755      		clr r21
+000312 2766      		clr r22
+                 
+                 		; extract RPM Level into r21
+000313 fb07      		bst r16, 7
+000314 f951      		bld r21, 1
+000315 fb06      		bst r16, 6
+000316 f950      		bld r21, 0
+                 
+                 		; extract Load Level into r22
+000317 fb05      		bst r16, 5
+000318 f961      		bld r22, 1
+000319 fb04      		bst r16, 4
+00031a f960      		bld r22, 0
+                 
+                 		; algorithmForLookup = (loadLevel * 4) + rpmLevel
+00031b e074      		ldi r23, $04
+00031c 9f67      		mul r22, r23
+00031d 2d60      		mov r22, r0
+00031e 0f65      		add r22, r21
+                 
+                 		; initialise Z pointer
+00031f e0f2      		ldi ZH, HIGH(RPMLoad_Lookup*2)
+000320 e0e0      		ldi ZL, LOW(RPMLoad_Lookup*2)
+000321 1fe6      		ADC ZL, r22
+                 
+                 		; store basePulseWidth into r24
+000322 9184      		lpm r24, Z
+                 		
+000323 2755      		clr r21
+                 		; extract coolantTemp into r21
+000324 fb03      		bst r16, 3
+000325 f951      		bld r21, 1
+000326 fb02      		bst r16, 2
+000327 f950      		bld r21, 0
+                 
+                 		; initialise Z pointer
+000328 e0f2      		ldi ZH, HIGH(FactorA_Lookup*2)
+000329 e1e0      		ldi ZL, LOW(FactorA_Lookup*2)
+00032a 1fe5      		ADC ZL, r21
+                 
+                 		; store factorA into r25
+00032b 9194      		lpm r25, Z
+                 		
+                 		; extract oxygenLevel into r21
+00032c 2f50      		mov r21, r16
+00032d 7053      		andi r21, $03
+                 
+                 		; initialise Z pointer
+00032e e0f2      		ldi ZH, HIGH(FactorB_Lookup*2)
+00032f e1e4      		ldi ZL, LOW(FactorB_Lookup*2)
+000330 1fe5      		ADC ZL, r21
+                 
+                 		; store factorB into r19
+000331 9134      		lpm r19, Z
+                 
+                 		; factorA * factorB
+000332 9f39      		mul r19, r25
+000333 2d60      		mov r22, r0
+                 		
+                 		; result * basePulseWidth
+000334 9f68      		mul r22, r24
+000335 2d60      		mov r22, r0
+000336 2d71      		mov r23, r1
+000337 2788      		clr r24
+                 		
+                 		;result / 40
+000338 e238      		ldi r19, $28
+000339 2744      		clr r20
+00033a 2755      		clr r21
+                 
+00033b df4b      		rcall div24x24_24
+                 
+00033c 2f40      		mov r20, r16
+00033d 2f56      		mov r21, r22
+                 
+                 		; check to round-up or round-down
+00033e e124      		ldi r18, $14
+00033f d102      		rcall RoundValue
+                 		
+                 		; store pulseWidth into SRAM
+000340 9350 0067 		sts pulseWidth, r21
+                 
+                 
+                 
+000342 910f      		pop ISREG
+                 		
+000343 98ad      		cbi PORTC, PC5
+                 
+000344 9508      		RET
+                 ;******* End FuelInjectionTimingCalc *******
+                 
+                 ;******* Start Fuel Injection Counter *******
+                 Fuel_Injection_Counter:
+                 		
+000345 930f      		push ISREG	;store indicator SREG on stack to free r16 for use
+                 
+000346 9100 0068 		lds r16, FuelInjectionCounts; Load fuel injection counts
+000348 9150 0067 		lds r21, pulseWidth; load in required pulsewidth
+00034a e072      		ldi r23, $02
+00034b e065      		ldi r22, $05
+                 
+                 		;implement pulseWidth*2/5
+00034c 9f75      		mul r23, r21
+00034d 2d50      		mov r21, r0
+                 
+00034e df51      		rcall div8u
+                 		
+00034f 0f54      		add r21, r20 
+                 
+                 		; check current counts and required pulsewidth
+000350 1705      		cp r16, r21;
+000351 f021      		breq calculateTiming
+                 		doNotCalculate:
+000352 9503      			inc r16
+000353 9300 0068 			sts FuelInjectionCounts, r16
+000355 c004      			rjmp EndTimingCheck
+                 		calculateTiming:
+000356 e001      			ldi r16, $01
+000357 9300 0068 			sts FuelInjectionCounts, r16
+000359 dfb4      			rcall Fuel_Injection_Timing_Calc ;if the count meets the pulsewidth, recalculate the pulsewidth
+                 		EndTimingCheck:
+                 
+00035a 910f      		pop ISREG
+                 
+00035b 9508      		RET
+                 ;******* End Fuel Injetcion Counter *******
+                 
+                 ;******* Start of Monitoring_Tasks *******
+                 Monitoring_Tasks:	
+00035c 9aab      	sbi PORTC, PC3
+                 	
+                 
+                 ;This module reads data from ADCL. In the first case it reads in the data as car temp in fahrenheit,
+                 ;converts it to celcius and stores the result into SRAM. It then reads in the ADCL as the water level
+                 ;in ounces and converts this value to litres, and stores the result into SRAM. 
+                 		
+00035d 930f      	push ISREG	;store indicator SREG on stack to free r16 for use
+                 
+                 ;******* Temperature Monitoring_Start *******
+                 		
+00035e b154      		in r21, ADCL	;Take Temp reading (in Farenheit) from ADCL and load in r16
+                 		
+                 		;Formula for Fahrenheit to Celsius:   C = ((F-32)*5)/9 
+                 		
+00035f e035      		ldi r19, $05    ;store 10 in r18
+000360 e069      		ldi r22, $09	;store 18 in r19
+000361 e025      		ldi r18, $05	;load value to check for rounding into r18
+                 		
+000362 fb57      		bst r21,7		;store MSB of ADCL into T-flag
+000363 5250      		subi r21, $20	;subi sets Nflag if result has a 1 in MSB
+                 
+000364 f00e      		brts largeNumber	;check whether the first bit of ADCL is 1 (i.e the number is large)
+                 		smallNumber:
+000365 c001      			rjmp endclear
+                 		largeNumber:
+000366 94a8      			cln				;if the number was initially large clear the Nflag because its not negative
+                 		endclear:
+                 
+000367 f42a      		brpl  positiveResult
+                 		negativeResult:
+000368 9551      			neg r21			;convert to positive
+000369 d0dd      			rcall Mul_Frac
+00036a d0d7      			rcall RoundValue
+00036b 9551      			neg r21			;convert back to negative
+00036c c002      			rjmp endNegCheck
+                 		positiveResult:
+00036d d0d9      			rcall Mul_Frac
+00036e d0d3      			rcall RoundValue
+                 		endNegCheck:
+                 
+00036f 9350 006d 		sts TempCelsius, r21 
+                 	;******* Temperature Monitoring_End *******
+                 
+                 	;******* Water Level Monitoring_Start *******
+                 		
+000371 b154      		in r21, ADCL	;take water level reading (in ounces) from ADCL and load into r16
+                 		
+                 		;Formula for ounces to litres L = Oz/33.8. This is implemented as L = (Oz*5)/169.
+000372 ea39      		ldi r19, $a9	;store 169 (33.8*5) into r19
+000373 e065      		ldi r22, $05	;store scale number(5) in r22
+000374 9f56      		mul r21, r22	; Oz*5
+                 		
+                 		;Set registers for div24x24
+000375 2d60      		mov r22, r0		; move LByte of product to r22
+000376 2d71      		mov r23, r1		; move HByte of product to r23
+000377 2788      		clr r24
+000378 2744      		clr r20
+000379 2755      		clr r21
+                 
+00037a df0c      		rcall div24x24_24 ; (Oz*5)/169
+                 
+                 		;Set registers for Round Value
+00037b e525      		ldi r18, $55 	;load value to check for rounding (85) into r18
+00037c 2f56      		mov r21, r22
+00037d 2f40      		mov r20, r16
+                 
+00037e d0c3      		rcall RoundValue
+                 		
+00037f 9350 006e 		sts WaterLevelLitres, r21
+                 ;******* Water Level Monitoring_End *******
+                 		
+000381 77cf      		cbr r28, (1<<MTASK_QUEUE)	;clear queue once Monitoring Tasks finishes
+000382 910f      		pop ISREG
+                 
+000383 98ab      		cbi PORTC, PC3
+000384 9508      RET
+                 ;******* End Monitoring_Tasks *******
+                 
+                 ;******* Start Car Door Indicator *******
+                 Car_Door_Indicator: 
+                 
+000385 9aaa      		sbi PORTC, PC2
+                 
+                 ;This module checks the state of the car door (whether it is open or closed) and switches on an
+                 ;LED in the case of it being open, and off in the case of it being closed.
+                 
+000386 b320      		in r18, PinD
+000387 fb25      		bst r18, PD5	;Store bit 5 of Pin D (State of car door) in the TFlag
+                 
+                 		;For the following code State refers to the bits. On the STK500 a state of 0 is ON and 1 is OFF
+                 
+                 		;Toggle state of LED if current state = 1 and previous state = 0 (switch release)
+000388 f00e      		brts CurrentState1
+                 		CurrentState0:
+000389 c00a      			rjmp endCurrentStateCheck
+                 		CurrentState1:
+00038a fbc1      			bst r28, CDState
+00038b f40e      			brtc PreviousState0
+                 			PreviousState1:
+00038c c007      				rjmp endPreviousStateCheck
+                 			PreviousState0:
+00038d fbc0      				bst r28, CDLEDOn
+00038e f01e      				brts CarDoorLEDOn
+                 				CarDoorLEDOff:				; LED On -> LED Off
+00038f 9ac5      					sbi PORTB, PB5	
+000390 60c1      					sbr r28,(1<<CDLEDON)
+000391 c002      					rjmp endCarDoorLED
+                 				CarDoorLEDOn:				; LED Off -> LED On
+000392 98c5      					cbi PORTB, PB5
+000393 7fce      					cbr r28,(1<<CDLEDON)
+                 				endCarDoorLED:
+                 			endPreviousStateCheck:
+                 		endCurrentStateCheck:
+                 		
+                 		;Update current state as previous state for next loop
+000394 fb25      		bst r18, 5
+000395 f9c1      		bld r28, CDState
+                 
+                 		;Check if Monitoring Tasks is in queue, if it is, execute
+000396 fdc7      		sbrc r28, MTASK_QUEUE
+000397 dfc4      		rcall Monitoring_Tasks
+                 
+000398 98aa      		cbi PORTC, PC2
+000399 9508      		RET
+                 
+                 ;******* End Car Door Indicator *******
+                 
+                 ;******* Start of Left Indicator Manager *******
+                 Left_Indicator_Manager:
+                 
+                 ;This module is responsible for setting up and calling the left counter to ensure
+                 ;the time interval between each flash is correct.
+                 
+                 	; Check if the indicator switch is pressed (indicator is on)
+00039a fb01      	bst ISREG, LSTATUS
+00039b f416      	brtc lIndicatorOn
+                 	lIndicatorOff:			; Do nothing
+00039c 6008      		sbr ISREG, (1<<LFLASH)
+00039d c008      		rjmp endLIndicator
+                 	lIndicatorOn:			
+                 		; If left indicator is on check if working or broken
+00039e fb05      		bst ISREG, LCOND
+00039f f41e      		brtc lIndicatorBroken
+                 		lIndicatorWorking:
+                 			; If it is working initialise long flash
+0003a0 e920      			ldi r18, LOW(LONGFLASH)
+0003a1 e031      			ldi r19, HIGH(LONGFLASH)
+0003a2 c002      			rjmp endLIndicatorBroken
+                 		lIndicatorBroken:
+                 			; If it is broken initialise short flash
+0003a3 ec28      			ldi r18, LOW(SHORTFLASH)
+0003a4 e030      			ldi r19, HIGH(SHORTFLASH)
+                 		endLIndicatorBroken:
+0003a5 d00e      			rcall Left_Indicator_Counter
+                 	endLIndicator:
+                 	
+0003a6 9508      ret
+                 ;******* End of Left Indicator Manager *******
+                 
+                 ;******* Start of Right Indicator Manager *******
+                 Right_Indicator_Manager:
+                 	
+                 ;This module is responsible for setting up and calling the right counter to ensure
+                 ;the time interval between each flash is correct.
+                 	
+                 	; Check if the indicator switch is pressed (indicator is on)
+0003a7 fb00      	bst ISREG, RSTATUS
+0003a8 f416      	brtc rIndicatorOn
+                 	rIndicatorOff:			; Do nothing
+0003a9 6004      		sbr ISREG, (1<<RFLASH)
+0003aa c008      		rjmp endRIndicator
+                 	rIndicatorOn:			
+                 		; If right indicator is on check if working or broken
+0003ab fb04      		bst ISREG, RCOND
+0003ac f41e      		brtc rIndicatorBroken
+                 		rIndicatorWorking:
+                 			; If it is working initialise long flash
+0003ad e920      			ldi r18, LOW(LONGFLASH)
+0003ae e031      			ldi r19, HIGH(LONGFLASH)
+0003af c002      			rjmp endRIndicatorBroken
+                 		rIndicatorBroken:
+                 			; If it is broken initialise short flash
+0003b0 ec28      			ldi r18, LOW(SHORTFLASH)
+0003b1 e030      			ldi r19, HIGH(SHORTFLASH)
+                 		endRIndicatorBroken:
+0003b2 d011      			rcall Right_Indicator_Counter
+                 	endRIndicator:
+                 
+0003b3 9508      ret
+                 ;******* End of Right Indicator Manager *******
+                 
+                 ;******* Start of Left Indicator Counter *******
+                 Left_Indicator_Counter:
+                 
+                 ;This module is responisible for incrementing and resetting the the left counter
+                 ;which determines when teh LED gets turned on and off.
+                 
+                 		; Load counter values into register
+0003b4 9180 006c 		lds r24, LeftIndCounterL
+0003b6 9190 006b 		lds r25, LeftIndCounterH
+                 		; r18 has been initialised from parent function
+                 		; r19 has been initialised from parent function
+                 
+                 		; Check if counter has reached overflow
+0003b8 d09a      		rcall compare16
+                 		
+                 		; Increment counter if overflow not reached
+0003b9 f011      		brbs SREG_Z, lOverflowReached
+                 		lOverflowNotReached:		; Increment counter
+0003ba 9601      			adiw r25:r24, $01
+0003bb c003      			rjmp endLeftCounter
+                 		lOverflowReached:			; Else reset counter
+0003bc 2799      			clr r25
+0003bd 2788      			clr r24
+0003be d057      			rcall LFLASH_Toggle		; Toggle LFLASH
+                 		endLeftCounter:
+                 		
+                 		; Store counter values back into memory
+0003bf 9380 006c 		sts LeftIndCounterL, r24
+0003c1 9390 006b 		sts LeftIndCounterH, r25
+                 		
+0003c3 9508      ret
+                 ;******* End of Left Indicator Counter *******
+                 
+                 ;******* Start of Right Indicator Counter *******
+                 Right_Indicator_Counter:
+                 
+                 ;This module is responisible for incrementing and resetting the the right counter
+                 ;which determines when teh LED gets turned on and off.
+                 
+                 		; Load counter values into registers
+0003c4 9180 006a 		lds r24, RightIndCounterL
+0003c6 9190 0069 		lds r25, RightIndCounterH
+                 		; r18 has been initialised from parent function
+                 		; r19 has been initialised from parent function
+                 
+                 		; Check if counter has reached overflow
+0003c8 d08a      		rcall compare16
+                 		
+                 		; Increment counter if overflow not reached
+0003c9 f011      		brbs SREG_Z, rOverflowReached
+                 		rOverflowNotReached:		; Increment counter
+0003ca 9601      			adiw r25:r24, $01
+0003cb c003      			rjmp endRightCounter
+                 		rOverflowReached:			; Else reset counter
+0003cc 2799      			clr r25
+0003cd 2788      			clr r24
+0003ce d04d      			rcall RFLASH_Toggle		; Toggle RFLASH
+                 		endRightCounter:
+                 		
+                 		; Store counter values back into memory
+0003cf 9380 006a 		sts RightIndCounterL, r24
+0003d1 9390 0069 		sts RightIndCounterH, r25
+                 
+0003d3 9508      ret
+                 ;******* End of Right Indicator Counter *******
+                 
+                 ;******* Start of Left Indicator Status Switch *******
+                 Left_Status_Switch:
+                 
+                 ;This module polls the left switch to check whether the indicator is turned on or off.
+                 
+                 	; Load PIND into r17
+0003d4 b310      	in r17, PIND
+                 	
+                 	; Check if Left Indicator Switch is on / off
+0003d5 fb13      	bst r17, PD3
+0003d6 f416      	brtc leftIndicatorOn
+                 	leftIndicatorOff:						;If it is off, set LSTATUS in register
+0003d7 6002      		sbr ISREG, (1<<LSTATUS)
+0003d8 c001      		rjmp endLeftIndicatorStatusToggle
+                 	LeftIndicatorOn:						;If it is on, clear LSTATUS in register
+0003d9 7f0d      		cbr ISREG, (1<<LSTATUS)
+                 	endLeftIndicatorStatusToggle:
+                 	
+0003da 9508      ret
+                 ;******* End of Left Indicator Status Switch *******
+                 
+                 ;******* Start of Right Indicator Status Switch *******
+                 Right_Status_Switch:
+                 
+                 ;This module polls the right switch to check whether the indicator is turned on or off.
+                 
+                 	; Load PIND into r17
+0003db b310      	in r17, PIND
+                 	
+                 	; Check if Right Indicator Switch is on / off
+0003dc fb12      	bst r17, PD2
+0003dd f416      	brtc rightIndicatorOn
+                 	rightIndicatorOff:						; If it is off, set RSTATUS in register
+0003de 6001      		sbr ISREG, (1<<RSTATUS)
+0003df c001      		rjmp endRightIndicatorStatusToggle
+                 	RightIndicatorOn:						; If it is on, clear RSTATUS in register
+0003e0 7f0e      		cbr ISREG, (1<<RSTATUS)
+                 	endRightIndicatorStatusToggle:
+                 
+0003e1 9508      ret
+                 ;******* End of Right Indicator Status Switch *******
+                 
+                 ;******* Start of Left Condition Toggle *******
+                 Left_Condition_Toggle:		
+                 		
+                 ;This module toggles the state of the indicator between working and broken each time the left switch is
+                 ;released.		
+                 		
+                 		; Load data into registers
+0003e2 b310      		in r17, PinD
+                 		
+0003e3 fb14      		bst r17, PD4 ; Store bit 4 of PinD (Left Indicator Condition) in the TFlag
+                 
+                 		; For the following code State refers to the bits. On the STK500 a state of 0 is ON and 1 is OFF
+                 		
+                 		; Check current state of switch
+0003e4 f00e      		brts leftCurrentState1
+                 		leftCurrentState0:					; If switch is on, do nothing
+0003e5 c00d      			rjmp endLeftCurrentStateCheck
+                 		leftCurrentState1:					; If switch is off, check previous state
+0003e6 fb07      			bst ISREG, LPSTATE
+0003e7 f40e      			brtc leftPreviousState0
+                 			leftPreviousState1:				; If switch was off, do nothing
+0003e8 c00a      				rjmp endLeftPreviousStateCheck
+                 			leftPreviousState0:				; If switch was on, toggle condition
+0003e9 fb05      				bst ISREG, LCOND
+0003ea f016      				brts leftWorking
+                 				leftBroken:					; Working -> Broken	
+0003eb 6200      					sbr ISREG,(1<<LCOND)
+0003ec c001      					rjmp endToggleLeftCondition
+                 				leftWorking:				; Broken -> Working 
+0003ed 7d0f      					cbr ISREG,(1<<LCOND)
+                 				endToggleLeftCondition:
+0003ee e020      					ldi r18, $00
+0003ef 9320 006b 					sts LeftIndCounterH, r18
+0003f1 9320 006c 					sts LeftIndCounterL, r18
+                 			endLeftPreviousStateCheck:
+                 		endLeftCurrentStateCheck:
+                 		
+                 		; Update new switch state
+0003f3 fb14      		bst r17, PD4
+0003f4 f907      		bld ISREG, LPSTATE
+                 
+0003f5 9508      ret
+                 ;******* End of Left Condition Toggle *******
+                 
+                 ;******* Start of Right Condition Toggle *******
+                 Right_Condition_Toggle:
+                 
+                 ;This module toggles the state of the indicator between working and broken each time the right switch is
+                 ;released.
+                 
+                 		; Load data into registers
+0003f6 b310      		in r17, PinD
+                 		
+0003f7 fb11      		bst r17,PD1 ; Store bit 1 of PinD (Right Indicator Condition) in the TFlag
+                 
+                 		; For the following code State refers to the bits. On the STK500 a state of 0 is ON and 1 is OFF
+                 		
+                 		; Check current state of switch
+0003f8 f00e      		brts rightCurrentState1
+                 		rightCurrentState0:						; If switch is on, do nothing
+0003f9 c00d      			rjmp endRightCurrentStateCheck
+                 		rightCurrentState1:						; If switch is off, check previous state
+0003fa fb06      			bst ISREG, RPSTATE
+0003fb f40e      			brtc rightPreviousState0
+                 			rightPreviousState1:				; If switch was off, do nothing
+0003fc c00a      				rjmp endRightPreviousStateCheck
+                 			rightPreviousState0:				; If switch was on, toggle condition
+0003fd fb04      				bst ISREG, RCOND
+0003fe f016      				brts rightWorking
+                 				rightBroken:					; Working -> Broken	
+0003ff 6100      					sbr ISREG,(1<<RCOND)
+000400 c001      					rjmp endToggleRightCondition
+                 				rightWorking:					; Broken -> Working 
+000401 7e0f      					cbr ISREG,(1<<RCOND)
+                 				endToggleRightCondition:
+000402 e020      					ldi r18, $00
+000403 9320 0069 					sts RightIndCounterH, r18
+000405 9320 006a 					sts RightIndCounterL, r18
+                 			endRightPreviousStateCheck:
+                 		endRightCurrentStateCheck:
+                 		
+                 		; Update new switch state
+000407 fb11      		bst r17, PD1
+000408 f906      		bld ISREG, RPSTATE
+                 
+000409 9508      ret
+                 ;******* End of Right Condition Toggle *******
+                 
+                 ;******* Start of Flash Left LED *******
+                 Left_LED_Toggle:
+                 
+                 ;This module turns the left indicator LED on and off.
+                 	
+                 	; Check if LED should be on / off
+00040a fb03      	bst ISREG, LFLASH
+00040b f416      	brtc leftLEDOn
+                 	leftLEDOff:					; turn it off
+00040c 9ac3      		sbi PORTB, PB3
+00040d c001      		rjmp endLeftLEDToggle
+                 	leftLEDOn:					; turn it on
+00040e 98c3      		cbi	PORTB, PB3
+                 	endLeftLEDToggle:
+                 
+00040f 9508      ret
+                 ;******* End of Flash Left LED *******
+                 
+                 ;******* Start of Flash Right LED *******
+                 Right_LED_Toggle:
+                 
+                 ;This module turns the right indicator LED on and off.
+                 
+                 	; Check if LED should be on / off
+000410 fb02      	bst ISREG, RFLASH
+000411 f416      	brtc rightLEDOn
+                 	rightLEDOff:					; turn it off
+000412 9ac2      		sbi PORTB, PB2
+000413 c001      		rjmp endRightLEDToggle
+                 	rightLEDOn:						; turn it on
+000414 98c2      		cbi	PORTB, PB2
+                 	endRightLEDToggle:
+                 
+000415 9508      ret
+                 ;******* End of Flash Right LED *******
+                 
+                 ;******* Start of Flash Left LED *******
+                 LFLASH_Toggle:
+                 
+                 ;This module toggles the LFLASH bit each time the counter is reset
+                 	
+                 	; Check if LFLASH is set / clear
+000416 fb03      	bst ISREG, LFLASH
+000417 f416      	brtc LFLASHIsClear
+                 	LFLASHIsSet:					; LFLASH(set -> clear)
+000418 7f07      		cbr ISREG, (1<<LFLASH)
+000419 c001      		rjmp endLFLASHToggle
+                 	LFLASHIsClear:					; LFLASH(clear -> set)
+00041a 6008      		sbr ISREG, (1<<LFLASH)
+                 	endLFLASHToggle:
+                 	
+00041b 9508      ret
+                 ;******* End of Flash Left LED *******
+                 
+                 ;******* Start of Flash Right LED *******
+                 RFLASH_Toggle:
+                 
+                 ;This module toggles the RFLASH bit each time the counter is reset
+                 
+                 	; Check if RFLASH is set / clear
+00041c fb02      	bst ISREG, RFLASH
+00041d f416      	brtc RFLASHIsClear
+                 	RFLASHIsSet:					; RFLASH(set -> clear)
+00041e 7f0b      		cbr ISREG, (1<<RFLASH)
+00041f c001      		rjmp endRFLASHToggle
+                 	RFLASHIsClear:					; RFLASH(clear -> set)
+000420 6004      		sbr ISREG, (1<<RFLASH)
+                 	endRFLASHToggle:
+                 	
+000421 9508      ret
+                 ;******* End of Flash Right LED *******
+                 
+                 ;******* Start of External Interrupt *******
+                 Collision_Detection:   
+                 
+000422 9aae      	sbi PORTC, PC6
+                 
+                 		
+                 
+                 ;This module reads the input from the ADC, the input is a force measurement in G's. This force
+                 ;measurement is constantly monitored and if the force measurement exceeds 4G, an assigned LED on
+                 ;the board lights up to indicate this.
+                 
+000423 930f      		push ISREG
+000424 931f      		push r17
+000425 939f      		push r25
+000426 b70f      		in r16, SREG
+000427 930f      		push r16
+                 
+000428 2700      		clr r16
+000429 2711      		clr r17
+00042a 2799      		clr r25
+                 		
+00042b 9ab8      		sbi DDRB, PB0
+                 		; Make sure output pin doesnt clash
+                 		
+00042c b114      		in r17, ADCL
+00042d b105      		in r16, ADCH
+                 		
+                 		; store force in r25
+00042e fb01      		bst r16, 1
+00042f f993      		bld r25, 3
+000430 fb00      		bst r16, 0
+000431 f992      		bld r25, 2
+000432 fb17      		bst r17, 7
+000433 f991      		bld r25, 1
+000434 fb16      		bst r17, 6
+000435 f990      		bld r25, 0
+                 		
+                 		; check if force reading exceeds threshold
+000436 3094      		cpi r25, thresholdForce
+000437 f410      		brsh isGreaterThanThreshold
+                 		isLessThanThreshold:
+000438 9ac0      			sbi PORTB, PB0
+000439 c001      			rjmp endThreshold
+                 		isGreaterThanThreshold:
+00043a 98c0      			cbi PORTB, PB0
+                 		endThreshold:
+                 
+00043b 910f      		pop r16
+00043c bf0f      		out SREG, r16
+00043d 919f      		pop r25
+00043e 911f      		pop r17
+00043f 910f      		pop ISREG
+                 		
+000440 98ae      		cbi PORTC, PC6
+                 
+000441 9518      		RETI			;Return from Interurpt
+                 ;******* End External Interrupt *******
+                 
+                 ;******* Start of Rounding Module *******
+                 RoundValue:
+                 
+                 ;Compares r20 to r18. If it is great or equal, increments r20 by 1.
+                 
+000442 1742      		cp r20, r18
+000443 f408      		brsh isGreater
+                 		isLess:
+000444 c001      		rjmp endRound
+                 		isGreater:
+000445 9553      		inc r21
+                 		endRound:
+                 		
+000446 9508      		RET			;Return from Module
+                 ;******* End Rounding Module *******
+                 
+                 ;******* Multiply Fraction *******
+                 Mul_Frac:
+                 
+                 ;Calculates (r21*r19)/(r22). Remainder stored in r20, result in r21.
+                 	
+000447 939f      	push r25
+000448 938f      	push r24
+                 
+000449 de56      	rcall div8u ; r21/r22
+                 	
+00044a 9f53      	mul r21, r19;  Result1*r19
+00044b 2da0      	mov r26, r0 ; move product1 to r26
+                 	
+00044c 9f43      	mul r20, r19; remainder1*r19
+00044d 2d50      	mov r21, r0; move product2 to r21
+                 	
+00044e de51      	rcall div8u; (product2)/r22
+                 	
+00044f 0f5a      	add r21,r26;  Result2 + Product1
+                 
+000450 918f      	pop r24
+000451 919f      	pop r25
+000452 9508      	RET
+                 ;******* End Multiply Fraction *******
+                 
+                 ;******* Start of 16-bit Compare *******
+                 compare16:	
+                 		
+000453 1782      		cp	r24,r18	;Compare low byte
+000454 0793      		cpc	r25,r19	;Compare high byte
+                 		
+000455 9508      		RET			;Return from Module
+
+
+RESOURCE USE INFORMATION
+------------------------
+
+Notice:
+The register and instruction counts are symbol table hit counts,
+and hence implicitly used resources are not counted, eg, the
+'lpm' instruction without operands implicitly uses r0 and z,
+none of which are counted.
+
+x,y,z are separate entities in the symbol table and are
+counted separately from r26..r31 here.
+
+.dseg memory usage only counts static data declared with .byte
+
+"ATmega8" register use summary:
+r0 :  38 r1 :  31 r2 :  41 r3 :   0 r4 :   5 r5 :   4 r6 :   0 r7 :   0 
+r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 r13:   0 r14:   0 r15:   0 
+r16:  97 r17:  53 r18:  52 r19:  52 r20:  32 r21:  54 r22:  38 r23:  26 
+r24:  18 r25:  25 r26:   4 r27:   2 r28:  12 r29:   2 r30:   8 r31:   5 
+x  :   0 y  :   0 z  :   3 
+Registers used: 22 out of 35 (62.9%)
+
+"ATmega8" instruction use summary:
+.lds  :   0 .sts  :   0 adc   :  51 add   :  27 adiw  :   2 and   :   0 
+andi  :   1 asr   :   0 bclr  :   0 bld   :  13 brbc  :   0 brbs  :   2 
+brcc  :   2 brcs  :   0 breq  :   1 brge  :   0 brhc  :   0 brhs  :   0 
+brid  :   0 brie  :   0 brlo  :   0 brlt  :   0 brmi  :   0 brne  :   2 
+brpl  :   1 brsh  :   2 brtc  :  13 brts  :   8 brvc  :   0 brvs  :   0 
+bset  :   0 bst   :  34 cbi   :  10 cbr   :   9 clc   :   2 clh   :   0 
+cli   :   0 cln   :   1 clr   :  25 cls   :   0 clt   :   0 clv   :   0 
+clz   :   0 com   :   0 cp    :   3 cpc   :   1 cpi   :   1 cpse  :   0 
+dec   :   2 eor   :   0 fmul  :   3 fmuls :   3 fmulsu:   6 icall :   0 
+ijmp  :   0 in    :  12 inc   :   2 ld    :   0 ldd   :   0 ldi   :  43 
+lds   :   6 lpm   :   6 lsl   :   0 lsr   :   0 mov   :  14 movw  :   9 
+mul   :  17 muls  :   3 mulsu :   6 neg   :   2 nop   :   0 or    :   0 
+ori   :   0 out   :  13 pop   :  24 push  :  24 rcall :  32 ret   :  31 
+reti  :   2 rjmp  :  35 rol   :   8 ror   :   0 sbc   :  14 sbci  :   0 
+sbi   :  10 sbic  :   0 sbis  :   0 sbiw  :   0 sbr   :  12 sbrc  :   1 
+sbrs  :   0 sec   :   2 seh   :   0 sei   :   2 sen   :   0 ser   :   0 
+ses   :   0 set   :   0 sev   :   0 sez   :   0 sleep :   0 spm   :   0 
+st    :   0 std   :   0 sts   :  19 sub   :   4 subi  :   1 swap  :   0 
+tst   :   0 wdr   :   0 
+Instructions used: 54 out of 110 (49.1%)
+
+"ATmega8" memory use summary [bytes]:
+Segment   Begin    End      Code   Data   Used    Size   Use%
+---------------------------------------------------------------
+[.cseg] 0x000000 0x0008ac   1202     24   1226    8192  15.0%
+[.dseg] 0x000060 0x00006f      0      8      8    1024   0.8%
+[.eseg] 0x000000 0x000000      0      0      0     512   0.0%
+
+Assembly complete, 0 errors, 0 warnings
